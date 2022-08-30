@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
+
 const Product =  require('../models/Product')
+const User = require('../models/User');
+
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const ensureAuthenticated = require('../helpers/auth');
+
 
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
@@ -28,6 +35,7 @@ router.post('/getProduct', async (req, res) => {
     res.send({
         products: products.rows
     })
+
 
 })
 
