@@ -71,12 +71,15 @@ app.use(session({
 //database
 DBConnection.setUpDB(false)
 
-// Passport Config 
-
+// passport
 const passport = require('passport');
-const passportConfig = require('./config/passport');
-passportConfig(passport)
-app.use(passport.session())
+const passportConfig = require('./config/passportConfig');
+passportConfig.localStrategy(passport);
+
+// Initialize passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 // Initilize Passport middleware 
