@@ -1,0 +1,71 @@
+<div class="card" style="padding:10px">
+  <div class="card-header">
+    <h2>Reward Management</h2>
+  </div>
+  <div class="card-body">
+    <table class="table table-striped" id="rewards-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Code</th>
+          <th>Discount</th>
+          <th>Spools Needed</th>
+          <th>EXP Date</th>
+          <th>Quantity</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each vouchers}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.voucher_code}}</td>
+          <td>{{this.discount_amount}}</td>
+          <td>{{this.spools_needed}}</td>
+          <td>{{this.expiry_date}}</td>
+          <td>{{this.quantity}}</td>
+          <td class="justify-content-center">
+            <button onclick="location.href = '/admin/editVoucher/{{this.id}}'" class="warning-btn my-2">Edit</button>
+
+            <button type="button" class="danger-btn" data-bs-toggle="modal" data-bs-target="#myModal_{{this.id}}">
+              Delete
+            </button>
+            <form action="/admin/deleteVoucher" class="del" method="POST">
+              <div class="modal" id="myModal_{{this.id}}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Delete Confirmation</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to delete {{this.name}}?
+                    </div>
+                    <div class="modal-footer">
+                      <input type="submit" value="Delete" class="danger-btn-fixed">
+                      <input type="hidden" name="id" id="id" value="{{this.id}}">
+                      <input type="hidden" name="name" id="name" value="{{this.name}}">
+                      <button type="button" class="light-btn" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="" style="width: 95%; padding: 15px;">
+      <button onclick="location.href = '/admin/addVouchers'" class="blue-btn">Add Voucher</button>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    const rewards_table = document.getElementById('rewards-table');
+    let rewardsTable = new simpleDatatables.DataTable(rewards_table);
+  });
+</script>
