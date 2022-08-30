@@ -1,4 +1,5 @@
 const mySQLDB = require('./DBConfig');
+const Product = require('../models/Product');
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 const Msg = require('../models/Msg');
