@@ -10,10 +10,6 @@ const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
 
 
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const passport = require('passport');
-const ensureAuthenticated = require('../helpers/auth');
 router.get('/', async (req, res) => {
     res.render("index")
 })
