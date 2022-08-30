@@ -35,9 +35,11 @@ const onConnection = (socket) => {
 
     socket.on('chat:room', (chatId) => {
         socket.join(`Chat ${chatId}`)
+        console.log(`${socket.id} has join room "Chat ${chatId}"`);
     })
 
     messagingHandler(io, socket)
+    console.log(`${socket.id} has connected`);
 }
 
 io.on("connection", onConnection);
