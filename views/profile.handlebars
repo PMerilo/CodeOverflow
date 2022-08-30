@@ -54,7 +54,8 @@
           </div>
           <div class="row">
             <p class="col-5">Phone Number: </p>
-            {{#if (phonenumbercheck user.phoneNumber)}}
+            {{!-- {{#if (phonenumbercheck user.phoneNumber)}} --}}
+            {{#if (user.phoneNumber)}}
             <p class="col-7">{{user.phoneNumber}}</p>
             {{else}}
             <p class="col-7">Not registered*</p>
@@ -64,13 +65,6 @@
             <p class="col-5">Password: </p>
             <a class="col-7" href="/changePassword">Change Password</a>
           </div>
-          {{#if user.newsLetter}}
-          <div class="row">
-            <p class="col-5">Subscribed to NewsLetter ☆</p>
-            
-          </div>
-          {{else}}
-          {{/if}}
           <div class="row">
 
             <form action="" style="margin-top: 10px;" method="POST">
@@ -99,11 +93,6 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-info" data-bs-toggle="modal">
-                <a href="/backupcodes" class="text-white">
-                Backup Codes
-                </a>
-              </button>
             </form>
 
 

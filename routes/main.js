@@ -8,7 +8,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
-
+const googlelogin = require('../helpers/googlelogin');
+googlelogin()
 
 router.get('/', async (req, res) => {
     res.render("index")
@@ -120,6 +121,16 @@ router.get('/logout', (req, res, next) => {
     res.redirect('/');
 });
 
+router.get('/login-google', 
+  passport.authenticate('google', { scope : ['profile', 'email'] }));
+ 
+router.get('/login-google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login',successRedirect: '/',failureFlash: true }))
+
+router.get('/profile', ensureAuthenticated, async (req, res) => {
+
+    res.render("profile")
+})
 router.get('/currentUser', (req, res, next) => {
     let data
     if (req.isAuthenticated()) {
