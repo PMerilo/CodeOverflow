@@ -8,12 +8,6 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
-
-
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const passport = require('passport');
-const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
 router.get('/', async (req, res) => {
