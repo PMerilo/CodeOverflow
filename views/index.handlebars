@@ -20,136 +20,9 @@
     <img src="images/banner5.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
   </div>
 </div>
-<div class="container">
-  <br>
-  <h1 style="font-family: 'Courier New', monospace;">Best Selling Products</h1>
-  <div class="row mt-3">
-    <div class="product-showcase">
-      {{#each top10Products}}
-      <div class="wrapper">
-        <div class="product-scard">
-          <div class="product-left">
-            <div class="header">
-              <h1>{{this.name}}</h1>
-            </div>
-            <div class="product-main">
-              <div class="focus">
-                <span>Description</span>
-              </div>
-              <p>{{this.description}}</p>
-            </div>
-            <div class="product-details">
-              <div class="product-total">
-                <h3>Total Price</h3>
-                <p>${{this.price}}</p>
-              </div>
-            </div>
-            <div class="product-btns">
-              <button class="button shop-item-button" value="{{ this.sku }}" value="1" onclick="addtocartClicked(this)">
-                <span>Add to cart</span>
-                <div class="cart">
-                  <svg viewBox="0 0 36 26">
-                    <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
-                    <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
-                  </svg>
-                </div>
-              </button>
-              <button type="button" value="{{ this.sku }}" class="wishlist btn bx bx-bookmark-heart"
-                style="font-size: 1.75em;" onclick="wishList(this)"></button>
-            </div>
-          </div>
-          <div class="product-right">
-            {{#if this.posterURL}}
-            <img src="{{this.posterURL}}">
-            {{else}}
-            <img src="/images/no-image.jpg">
-            {{/if}}
-          </div>
-        </div>
-        <input type="hidden" name="sku" value="{{ this.sku }}" class="sku">
-      </div>
-      {{/each}}
-    </div>
-  </div>
-  <div class="row mt-3">
-    {{#each products}}
-    <div class="col col-12 col-xs-12 col-md-6 col-lg-4 col-xl-3" id="product_card">
-      <div class="card">
-        {{#if this.posterURL}}
-        <img class="card-img-top product-image" src="{{this.posterURL}}" alt="Card image cap" width="153px"
-          height="372px">
-        {{else}}
-        <img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
-          height="372px">
-        {{/if}}
-        <div class="card-button">
-          <button type="button" class="show-item modal-opener" value="{{this.sku}}" data-bs-toggle="modal"
-            data-bs-target="#myModal_{{this.sku}}">
-            Shop This Product
-          </button>
-        </div>
-
-        <div class="modal" id="myModal_{{this.sku}}">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-              <div class="row">
-                {{#if this.posterURL}}
-                <div class="container col-12 col-md-6">
-                  <img src="{{this.posterURL}}" height="541px" width="381px" class="image">
-                </div>
-                {{else}}
-                <div class="container col-12 col-md-6">
-                  <img src="/images/no-image.jpg" height="541px" width="381px" class="image">
-                </div>
-                {{/if}}
-
-                <div class="container col-12 col-md-6 modal-info">
-                  <button type="button" class="btn-close x-button" data-bs-dismiss="modal"></button>
-                  <div class="modal-header">
-                    <h6 class="modal-title">{{ this.name }}</h6>
-                    <div class="review" id="review_{{this.sku}}">
-                      <span class="review-star bx bx-star"></span>
-                      <span class="review-star bx bx-star"></span>
-                      <span class="review-star bx bx-star"></span>
-                      <span class="review-star bx bx-star"></span>
-                      <span class="review-star bx bx-star"></span>
-                      <p class="totalreviews">{{this.reviews_given}} Review/s</p>
-                    </div>
-                  </div>
-
-                  <div class="modal-body">
-                    <div class="price">${{ this.price }}</div>
-                    <div class="desc">{{ this.description }}</div>
-                  </div>
-
-                  <div class="modal-footer">
-                    <button class="button shop-item-button" value="{{ this.sku }}" value="1"
-                      onclick="addtocartClicked(this)">
-                      <span>Add to cart</span>
-                      <div class="cart">
-                        <svg viewBox="0 0 36 26">
-                          <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
-                          <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
-                        </svg>
-                      </div>
-                    </button>
-                    <button type="button" value="{{ this.sku }}" class="wishlist btn bx bx-bookmark-heart"
-                      style="font-size: 1.75em;" onclick="wishList(this)"></button>
-                    <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/{{this.sku}}';">See
-                      Full Details</div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        {{!-- <input type="hidden" id="stars" value="{{this.stars_given}}">
-        <input type="hidden" id="reviews" value="{{this.reviews_given}}"> --}}
-      </div>
-    </div>
-    {{/each}}
+<div class="container ">
+  <div class="row mt-3 product-items">
+    {{!-- product --}}
   </div>
 </div>
 
@@ -202,4 +75,117 @@
     dots: true,
     focusOnSelect: true,
   });
+$.ajax({
+  method:'post',
+  url: '/totalPages',
+  success: function(data){
+    totalPages = (parseInt(data['page']))
+    page = 0
+  }
+})
+
+window.addEventListener('load', loadProduct)
+window.addEventListener('scroll', loadProduct)
+
+
+var working = false
+function loadProduct(){
+  if(working == false){
+    working = true
+    $.ajax({
+    method: 'post',
+    url: '/getProduct',
+    data: {
+      page: page
+    },
+    success: function(data){
+      products = data['products']
+  for(var a in products){
+    price = products[a]['price']
+    image = products[a]['image']
+    name = products[a]['name']
+    desc = products[a]['description']
+    sku = products[a]['sku']
+    posterURL = products[a]['posterURL']
+    if(posterURL.length == 0){
+      posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
+              height="372px">`
+    }else{
+      posterURL = `<img class="card-img-top product-image" src="`+posterURL+`" alt="Card image cap" width="153px"
+              height="372px">`
+    }
+    reviews_given = products[a]['reviews_given']
+    stars = products[a]['stars_given']
+    $('.product-items').append(`  
+        <div class="col col-12 col-xs-12 col-md-6 col-lg-4 col-xl-3" id="product_card">
+          <div class="card">
+            `+posterURL+`
+            <div class="card-button">
+              <button type="button" class="show-item modal-opener" value="`+sku+`" data-bs-toggle="modal"
+                data-bs-target="#myModal_`+sku+`">
+                Shop This Product
+              </button>
+            </div>
+            <div class="modal" id="myModal_`+sku+`">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="row">
+                    `+posterURL+`
+                    <div class="container col-12 col-md-6 modal-info">
+                      <button type="button" class="btn-close x-button" data-bs-dismiss="modal"></button>
+                      <div class="modal-header">
+                        <h6 class="modal-title">`+name+`</h6>
+                        <div class="review" id="review_`+sku+`">
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <p class="totalreviews">`+reviews_given+` Review/s</p>
+                        </div>
+                      </div>
+                      <div class="modal-body">
+                        <div class="price">$`+price+`</div>
+                        <div class="desc">`+desc+`</div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="button shop-item-button" value="`+sku+`"
+                          onclick="addtocartClicked(this)">
+                          <span>Add to cart</span>
+                          <div class="cart">
+                            <svg viewBox="0 0 36 26">
+                              <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
+                              <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
+                            </svg>
+                          </div>
+                        </button>
+                        <button type="button" value="`+sku+`" class="wishlist btn bx bx-bookmark-heart"
+                          style="font-size: 1.75em;" onclick="wishList(this)"></button>
+                        <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/`+sku+`';">See
+                          Full Details</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            {{!-- <input type="hidden" id="stars" value="`+stars+`">
+            <input type="hidden" id="reviews" value="`+reviews_given+`"> --}}
+          </div>
+      </div>`)
+    }
+    if(page< totalPages){
+    page += 1
+    }else{
+      window.removeEventListener("scroll", loadProduct)
+    }
+    console.log(page)
+    setTimeout(function(){
+                    working = false;
+                }, 500)
+    }
+  })
+  }
+}
 </script>
