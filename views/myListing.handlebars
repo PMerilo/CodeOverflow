@@ -1,25 +1,3 @@
-<link rel="stylesheet" href="styles/homepage.css">
-<link rel="stylesheet" href="styles/product.css">
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
-<div class="slider-nav">
-  <div class="slide1">
-    <img src="images/banner.jpg" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
-  </div>
-  <div class="slide2">
-    <img src="images/banner2.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
-  </div>
-  <div class="slide3">
-    <img src="images/banner3.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
-  </div>
-  <div class="slide4">
-    <img src="images/banner4.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
-  </div>
-  <div class="slide45">
-    <img src="images/banner5.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
-  </div>
-</div>
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
@@ -60,26 +38,13 @@
     }
     e.preventDefault();
   }));
-  $('.slider-nav').slick({
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    focusOnSelect: true,
-  });
 
-  $('.product-showcase').slick({
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    dots: true,
-    focusOnSelect: true,
-  });
 $.ajax({
   method:'post',
   url: '/totalPages',
   success: function(data){
     totalPages = (parseInt(data['page']))
+    console.log(totalPages)
     page = 0
   }
 })
@@ -87,14 +52,13 @@ $.ajax({
 window.addEventListener('load', loadProduct)
 window.addEventListener('scroll', loadProduct)
 
-
 var working = false
 function loadProduct(){
   if(working == false){
     working = true
     $.ajax({
     method: 'post',
-    url: '/getProduct',
+    url: '/getListing',
     data: {
       page: page
     },
@@ -111,7 +75,7 @@ function loadProduct(){
       posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
               height="372px">`
     }else{
-      posterURL = `<img class="card-img-top product-image" src="/images/`+posterURL+`" alt="Card image cap" width="153px"
+      posterURL = `<img class="card-img-top product-image" src="/images/items/`+posterURL+`" alt="Card image cap" width="153px"
               height="372px">`
     }
     reviews_given = products[a]['reviews_given']
@@ -123,7 +87,7 @@ function loadProduct(){
             <div class="card-button">
               <button type="button" class="show-item modal-opener" value="`+sku+`" data-bs-toggle="modal"
                 data-bs-target="#myModal_`+sku+`">
-                Shop This Product
+                Edit this listing
               </button>
             </div>
             <div class="modal" id="myModal_`+sku+`">
@@ -175,15 +139,15 @@ function loadProduct(){
           </div>
       </div>`)
     }
-    if(page< totalPages){
-    page += 1
-    }else{
-      window.removeEventListener("scroll", loadProduct)
+    if(page < totalPages){
+        page += 1
+        }else{
+        window.removeEventListener("scroll", loadProduct)
     }
     console.log(page)
     setTimeout(function(){
                     working = false;
-                }, 500)
+    }, 500)
     }
   })
   }

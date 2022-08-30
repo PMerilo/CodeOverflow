@@ -1,0 +1,7 @@
+edit listing - 20%
+create listing - done (will improve if got time)
+infinite scrolling - done
+delete listing
+carbon footprint calculator
+sorting of category
+sorting by price
