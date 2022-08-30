@@ -1,14 +1,49 @@
 const express = require('express');
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
+
+const Product =  require('../models/Product')
 const User = require('../models/User');
+
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
 
+
+const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const ensureAuthenticated = require('../helpers/auth');
 router.get('/', async (req, res) => {
     res.render("index")
 })
+router.post('/getProduct', async (req, res) => {
+    var page = req.body.page
+    if(page == undefined){
+        page = 0
+    }else{
+        page = parseInt(page)
+    }
+    var products  = await Product.findAndCountAll({
+        raw: true,
+        limit: 4,
+        offset: 4*page
+    })
+    console.log(page)
+    res.send({
+        products: products.rows
+    })
+
+
+})
+
+router.post('/totalPages', async (req, res) => {
+    var products  = await Product.findAndCountAll({
+        raw: true,
+    })
+    res.send({page: Math.ceil(products.count/4)})
+})
+
 
 router.get('/register', (req,res) => {
     res.render("user/register")
