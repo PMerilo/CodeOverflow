@@ -54,13 +54,17 @@ router.get('/new/:productId', async (req, res) => {
 })
 
 router.post('/send', async (req, res) => {
-    let { content, productId, chatId } = req.body
+    let { content, productId, chatId, offer } = req.body
+    if (!offer) {
+        offer = false
+    }
     let chat
     console.log(req.body);
 
     let msg = await Msg.create({
         content: content,
         userId: req.user.id,
+        offer: offer
     })
 
     if (chatId) {
@@ -82,12 +86,12 @@ router.post('/send', async (req, res) => {
         await chat.addMsg(msg)
         chatId = chat.id
     }
-    return res.json({content, productId, chatId, userId: req.user.id, chat: await Chat.findByPk(chatId, { include: ['product', Msg, 'buyer'] }) })
+    return res.json({ content, productId, chatId, userId: req.user.id, chat: await Chat.findByPk(chatId, { include: ['product', Msg, 'buyer'] }), offer })
 })
 
 router.post('/markasseen', async (req, res) => {
     let { chatId } = req.body
-    let chat = await Msg.update({ seen: true }, { where: { seen: false, userId: { [Op.ne]: req.user.id }, chatId: chatId }})
+    let chat = await Msg.update({ seen: true }, { where: { seen: false, userId: { [Op.ne]: req.user.id }, chatId: chatId } })
     res.json({})
 })
 
@@ -111,5 +115,29 @@ router.get('/:chatId', async (req, res) => {
         ]
     })
     res.render("inbox/index", { chats })
+})
+
+router.post('/makeoffer', async (req, res) => {
+    let { chatId, amt } = req.body
+    let chat = await Chat.update({ offer: amt, status: "Offered" }, { where: { id: chatId } })
+    res.json({})
+})
+
+router.post('/refuseoffer', async (req, res) => {
+    let { chatId } = req.body
+    let chat = await Chat.update({ status: "Refused Offer" }, { where: { id: chatId } })
+    res.json({})
+})
+
+router.post('/acceptoffer', async (req, res) => {
+    let { chatId } = req.body
+    let chat = await Chat.update({ status: "Accepted Offer" }, { where: { id: chatId } })
+    res.json({})
+})
+
+router.post('/counteroffer', async (req, res) => {
+    let { chatId, amt } = req.body
+    let chat = await Chat.update({ offer: amt, status: "Counter Offered" }, { where: { id: chatId } })
+    res.json({})
 })
 module.exports = router

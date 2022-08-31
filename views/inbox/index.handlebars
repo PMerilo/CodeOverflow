@@ -1,4 +1,5 @@
-<div class="shadow-sm container-fluid rounded border col-10 d-flex flex-column" style="height: calc(100vh - 102px); ">
+<div class="shadow-sm container-fluid rounded border col-xxl-10 d-flex flex-column"
+    style="height: calc(100vh - 102px); ">
 
     <div class="row">
         <div class="col-xxl-3 col-sm-4 p-0 align-self-stretch">
@@ -37,7 +38,7 @@
                     <img class="rounded-circle img-fluid" width="60" src="/images/avatars/avatar1.jpg" alt="">
                     <div class="d-flex flex-column justify-content-center flex-grow-1">
                         <span>{{#equals buyerId ../user.id}}{{product.Owner}}{{else}}{{buyer.name}}{{/equals}}</span>
-                        <span class="text-truncate" style="max-width: 50%;">
+                        <span class="text-truncate" style="max-width: 80%;">
                             {{#if msgs.[0].content}}
                             {{#equals msgs.[0].userId ../user.id}}<i
                                 class="bi bi-check{{#if msgs.[0].seen}}-all{{/if}}"></i>{{/equals}}{{msgs.[0].content}}
@@ -52,13 +53,20 @@
         <div class="col-xxl-9 col-sm-8 p-0 vstack" style="height:100%;">
             <div class="border-bottom" id="product" style="display: none;">
                 <div class="d-flex align-items-center">
-                    <img src="/images/items/{{currentchat.product.posterURL}}" height="50px" width="50px" class="m-3" alt="">
+                    <img src="/images/items/{{currentchat.product.posterURL}}" height="50px" width="50px" class="m-3"
+                        alt="">
                     <div class="product-info">
                         <p class="m-0 product-name">{{currentchat.product.name}}</p>
                         <p class="m-0 product-price">{{currentchat.product.price}}</p>
                     </div>
-                    <div class="product-footer ms-auto offer-btn">
-                        <button class="btn btn-primary mx-3">Make Offer</button>
+                    <div class="product-footer ms-auto hstack">
+                        <span class="offer-status mx-3"></span>
+                        <button class="btn btn-primary offer-btn mx-3">Make Offer</button>
+                        <button class="btn btn-info offer-btn mx-3" style="display: none;">Counter Offer</button>
+                        <button class="btn btn-success offer-btn mx-3" style="display: none;">Accept Offer</button>
+                        <button class="btn btn-danger offer-btn mx-3" style="display: none;">Refuse Offer</button>
+                        <button class="btn btn-success payment-btn mx-3" style="display: none;">Make Payment</button>
+                        <button class="btn btn-info offer-btn mx-3" style="display: none;">Mark as sold</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +128,7 @@
             $.get(`/api/chat/${chatId}`, (data) => {
                 data.msgs.forEach(msg => {
                     var owner = msg.userId == userId
-                    $('#chat-panel').append(msgFormater(owner, msg.content))
+                    $('#chat-panel').append(msgFormater(owner, msg.content, msg.offer))
                 })
                 if (data.open) {
                     $('#chat-box').show()
@@ -132,6 +140,41 @@
 
                 }
                 $('.chat-name').text(data.buyerId == userId ? data.product.Owner : data.buyer.name)
+
+                $('.offer-btn').hide()
+                if (data.status == 'Waiting for offer') {
+                    if (data.buyerId == userId) {
+                        $('.offer-btn:contains("Make Offer")').show()
+                    }
+                } else if (data.status == 'Offered') {
+                    $('.offer-status').text(data.status + " $" + data.offer)
+                    if (data.buyerId != userId) {
+                        $('.offer-btn:contains("Counter Offer")').show()
+                        $('.offer-btn:contains("Accept Offer")').show()
+                        $('.offer-btn:contains("Refuse Offer")').show()
+                    }
+                }
+                else if (data.status == 'Refused Offer') {
+                    $('.offer-status').text(data.status + " of $" + data.offer)
+                    if (data.buyerId == userId) {
+                        $('.offer-btn:contains("Make Offer")').show()
+                    }
+                }
+                else if (data.status == 'Counter Offered') {
+                    $('.offer-status').text(data.status + " $" + data.offer)
+                    if (data.buyerId == userId) {
+                        $('.offer-btn:contains("Accept Offer")').show()
+                        $('.offer-btn:contains("Make Offer")').show()
+                    }
+                } else if (data.status == 'Accepted Offer') {
+                    if (data.buyerId == userId) {
+                        $('.offer-status').text("Offer of $" + data.offer + " was accepted!")
+                        $('.payment-btn').show()
+                    } else {
+                        $('.offer-status').text(data.status + " of $" + data.offer)
+                        $('.offer-btn:contains("Mark as sold")').show()
+                    }
+                }
                 $('#product').show()
                 $('#product').find('img').attr('src', '/images/items/' + data.product.posterURL)
                 $('#product').find('.product-name').text(data.product.name)
@@ -202,7 +245,7 @@
 
 
 
-        function msgFormater(owner, content) {
+        function msgFormater(owner, content, offer) {
             var options = new Array()
             if (owner) {
                 options.push('right')
@@ -211,13 +254,25 @@
                 options.push('left')
                 options.push('')
             }
-            const msgFormat = [
-                `<div class="d-flex ${options.pop()}">`,
-                `<div class="chat-bubble chat-bubble--${options.pop()} text-break" style="max-width: 50%;">`,
-                `${content}`,
-                `</div>`,
-                `</div>`,
-            ]
+            let msgFormat
+            if (offer) {
+                let [status, amt] = content.split('$')
+                msgFormat = [
+                    `<div class="d-flex ${options.pop()}">`,
+                    `<div class="chat-bubble chat-bubble--${options.pop()} text-break" style="max-width: 50%;">`,
+                    `<b>${status}<br>$${amt}</b>`,
+                    `</div>`,
+                    `</div>`,
+                ]
+            } else {
+                msgFormat = [
+                    `<div class="d-flex ${options.pop()}">`,
+                    `<div class="chat-bubble chat-bubble--${options.pop()} text-break" style="max-width: 50%;">`,
+                    `${content}`,
+                    `</div>`,
+                    `</div>`,
+                ]
+            }
 
             return msgFormat.join('')
         }
@@ -246,7 +301,7 @@
             if (window.location.pathname.split('/').pop() == data.chatId) {
                 $(`[href="/inbox/${data.chatId}"]`).addClass('pe-none bg-dark bg-opacity-10')
                 $.post('/inbox/markasseen', { chatId: data.chatId })
-                $('#chat-panel').append(msgFormater(owner, data.content))
+                $('#chat-panel').append(msgFormater(owner, data.content, data.offer))
                 socket.emit('message:seen', data.chatId)
             }
             var d = $('#chat-panel');
@@ -260,5 +315,79 @@
         })
 
         $(`[href="${window.location.pathname}"`).click()
+
+
+        function sendOffer(status, amt) {
+            msg = { content: `${status} $${amt}`, productId: $chatForm.attr('data-bs-id'), chatId: window.location.pathname.split('/')[2] == 'new' ? '' : window.location.pathname.split('/').pop(), offer: true }
+            $.post("/inbox/send", msg, (data) => {
+                if (window.location.pathname.split('/')[2] == 'new') {
+                    socket.emit('chat:join', data.chatId)
+                    window.history.pushState('page2', '', `/inbox/${data.chatId}`);
+                }
+                location.reload()
+            })
+        }
+
+        $('.offer-btn:contains("Make Offer")').click(() => {
+            Swal.fire({
+                title: "Make Offer",
+                html: `$<input type="number" id="offer-amt" class="swal2-input" placeholder="$00.00" min=0.01 max=99999.99 step=0.01>`,
+                showCancelButton: true,
+                confirmButtonText: 'Offer',
+                preConfirm: () => {
+                    const amt = Swal.getPopup().querySelector('#offer-amt').value
+                    if (!amt || amt < 0.01 || amt > 99999.99) {
+                        Swal.showValidationMessage(`Please enter a valid offer amount`)
+                    }
+                    return { amt }
+                }
+            }).then(({ value }) => {
+                $.post('/inbox/makeoffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
+                sendOffer("Made Offer", value.amt)
+            })
+        })
+
+        $('.offer-btn:contains("Counter Offer")').click(() => {
+            Swal.fire({
+                title: "Counter Offer",
+                html: `$<input type="number" id="offer-amt" class="swal2-input" placeholder="$00.00" min=0.01 max=99999.99 step=0.01 value=${$('.offer-status').text().split('$').pop()}>`,
+                showCancelButton: true,
+                confirmButtonText: 'Counter',
+                preConfirm: () => {
+                    const amt = Swal.getPopup().querySelector('#offer-amt').value
+                    if (!amt || amt < 0.01 || amt > 99999.99) {
+                        Swal.showValidationMessage(`Please enter a valid offer amount`)
+                    }
+                    return { amt }
+                }
+            }).then(({ value }) => {
+                $.post('/inbox/counteroffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
+                sendOffer("Countered Offer", value.amt)
+            })
+        })
+
+        $('.offer-btn:contains("Refuse Offer")').click(() => {
+            Swal.fire({
+                title: "Refuse Offer",
+                text: `Are you sure you want to refuse this offer?`,
+                showCancelButton: true,
+                confirmButtonText: 'Refuse',
+            }).then(({ value }) => {
+                $.post('/inbox/refuseoffer', { chatId: window.location.pathname.split('/').pop() })
+                sendOffer("Refused Offer", $('.offer-status').text().split('$').pop())
+            })
+        })
+
+        $('.offer-btn:contains("Accept Offer")').click(() => {
+            Swal.fire({
+                title: "Accept Offer",
+                text: `Are you sure you want to accept this offer?`,
+                showCancelButton: true,
+                confirmButtonText: 'Accept',
+            }).then(({ value }) => {
+                $.post('/inbox/acceptoffer', { chatId: window.location.pathname.split('/').pop() })
+                sendOffer("Accepted Offer", $('.offer-status').text().split('$').pop())
+            })
+        })
     })
 </script>
