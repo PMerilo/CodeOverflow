@@ -16,6 +16,7 @@ const main = require('./routes/main')
 const listing = require('./routes/listing')
 const api = require('./routes/api')
 const inbox = require('./routes/inbox')
+const user = require('./routes/user')
 
 
 app.use('/webhook', express.raw({type: "*/*"}));
@@ -92,6 +93,7 @@ app.use(passport.session());
 const flash = require('connect-flash');
 app.use(flash());
 const flashMessenger = require('flash-messenger');
+const ensureAuthenticated = require("./helpers/auth");
 app.use(flashMessenger.middleware);
 
 // Place to define global variables
@@ -126,6 +128,16 @@ app.engine(
 				var next = arguments[arguments.length - 1];
 				return (a >= b) ? next.fn(this) : next.inverse(this);
 			},
+			identifygender(v1, v2) {
+				if (v1 == null) {
+					return true;
+				}
+				else if (String(v1) == v2) {
+					return true;
+
+				}
+				return false;
+			},
 		},
 	})
 );
@@ -146,9 +158,12 @@ app.all("/*", (req, res, next) => {
 
 app.use("/", main)
 app.use("/", listing)
-app.use("/inbox", inbox)
+app.use("/inbox", ensureAuthenticated, inbox)
 app.use("/api", api)
+app.use("/user", user)
 
+app.use('/build/', express.static(path.join(__dirname, 'node_modules/three/build')));
+app.use('/jsm/', express.static(path.join(__dirname, 'node_modules/three/examples/jsm')));
 
 
 const port = 5000;
