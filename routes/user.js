@@ -7,53 +7,65 @@ const upload = require('../helpers/imageUpload');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs')
 
-router.get('/profile', ensureAuthenticated, async (req, res) => {
-    user = await User.findByPk(req.user.id)
-    res.render("user/profile", {user})
+router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
+    user = await User.findByPk(req.params.id)
+    const belong = req.params.id == req.user.id
+    if (user) {
+        res.render("user/profile", {user, belong})
+    } else {
+        flashMessage(res, 'error', 'No profile found')
+        res.redirect('/')
+    }
+    
 })
 
-router.post('/profile', ensureAuthenticated, async (req, res) => {
+router.get('/account', ensureAuthenticated, async (req, res) => {
+    user = await User.findByPk(req.user.id)
+    res.render("user/myAccount", {user})
+})
+
+router.post('/account', ensureAuthenticated, async (req, res) => {
     User.destroy({where: {id: req.user.id}})
     flashMessage(res, 'success', 'Account successfully deleted.');
     res.redirect('/logout')
 })
 
-router.get('/editProfile', ensureAuthenticated, async (req, res) => {
+router.get('/editAccount', ensureAuthenticated, async (req, res) => {
     user = await User.findByPk(req.user.id)
-    res.render("user/editProfile", {user})
+    res.render("user/editAccount", {user})
 })
 
-router.post('/editProfile', ensureAuthenticated, async (req, res) => {
-    let {pfpUrl, name, email1, phoneNumber, gender} = req.body
+router.post('/editAccount', ensureAuthenticated, async (req, res) => {
+    let {pfpURL, name, email1, phoneNumber, gender} = req.body
     if (phoneNumber == '' || phoneNumber == NaN || phoneNumber == null) {
         phoneNumber = null
     } else {
         phoneNumber = parseInt(phoneNumber)
     }
-    if (!pfpUrl) {
+    if (!pfpURL) {
         await User.update({
             name: name,
             email: email1,
             phoneNumber: phoneNumber,
-            gender: gender
+            gender: gender,
         },
         {where: {id: req.user.id}}
         ).then((user) => {
             flashMessage(res, 'success', 'Your information has been updated')
-            res.redirect('/user/profile')
+            res.redirect('/user/account')
         })
         .catch(err => console.log(err))
     } else {
         await User.update({
-            profilepic: pfpUrl,
             name: name,
             email: email1,
-            phoneNumber: parseInt(phoneNumber),
-            gender: gender
+            phoneNumber: phoneNumber,
+            gender: gender,
+            profilepic: pfpURL,
         },
         {where: {id: req.user.id}}).then((user) => {
             flashMessage(res, 'success', 'Your information has been updated')
-            res.redirect('/user/profile')
+            res.redirect('/user/account')
         })
         .catch(err => console.log(err))
     } 
@@ -105,7 +117,7 @@ router.post('/changePassword', ensureAuthenticated, async (req, res) => {
         var hash = bcrypt.hashSync(newpassword, salt);
         await User.update(
             {password: hash},
-            {where :{id: id}}
+            {where :{id: req.user.id}}
         ).then((user) => {
             flashMessage(res, 'success', 'Password has been changed');
             res.redirect(`/user/profile`);

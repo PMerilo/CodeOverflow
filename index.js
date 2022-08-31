@@ -136,6 +136,9 @@ app.engine(
 				}
 				return false;
 			},
+			formatDate(date, targetFormat) {
+				return moment(date).format(targetFormat);
+			},
 		},
 	})
 );

@@ -1,110 +1,77 @@
-<style>
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-
-  }
-
-  body {
-    background: rgb(219, 226, 226);
-  }
-
-
-
-  .btn:hover {
-    background: white;
-    border: 1px solid;
-    color: rgb(99, 189, 184);
-
-  }
-  .btn:hover > a{
-    color: rgb(99, 189, 184) !important;
-  }
-</style>
-
-<div>
-  <div class="card mx-auto my-5" style="max-width: 70%">
-    <div class="row g-0">
-      <div class="col-md-4 p-4 d-flex justify-content-center align-items-center">
-        {{#if user.profilepic}}
-        <img src={{user.profilepic}} class="img-fluid rounded-start" alt="">
-        {{else}}
-        <img src="/images/logo.png" class="img-fluid rounded-start" alt="">
-        {{/if}}
-      </div>
-      <div class="col-md-8 d-flex justify-content-center align-items-center border-start border-info">
-        <div class="card-body">
-          <div class="row mb-5">
-            <h5 class="col-10 card-title mb-0 fs-3">{{user.name}}</h5>
-
-            <a class='col-1 btn btn-outline-dark p-1 border-0' href="/user/editProfile"><i class="bi bi-pencil-square"
-                title="Update Profile"></i></a>
-            <a class='col-1 btn btn-outline-dark p-1 border-0' href="/logout"><i class="bi bi-box-arrow-left"
-                title="Logout"></i></a>
-
+<section class="h-100 gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
+          <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+            <div class="ms-4 mt-5" style="width: 150px;height: 150px !important;z-index: 2" >
+              <img src="{{user.profilepic}}" height=""
+                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px;height: 150px !important; z-index: 1">
+                {{#if belong}}
+                    <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" href="/user/account"
+                        style="z-index: 1;">
+                        Edit profile
+                    </a>
+                {{/if}}
+            </div>
+            <div class="ms-3" style="margin-top: 130px;">
+              <h5>{{user.name}}</h5>
+              <p>Date Joined: {{formatDate user.createdAt 'DD MMM YYYY'}}</p>
+            </div>
           </div>
-          <div class="row">
-            <p class="col-5">Email: </p>
-            <p class="col-7">{{user.email}}</p>
-          </div>
-          <div class="row">
-            <p class="col-5">Gender: </p>
-            <p class="col-7">{{user.gender}}</p>
-          </div>
-          <div class="row">
-            <p class="col-5">Phone Number: </p>
-            {{!-- {{#if (phonenumbercheck user.phoneNumber)}} --}}
-            {{#if (user.phoneNumber)}}
-            <p class="col-7">{{user.phoneNumber}}</p>
-            {{else}}
-            <p class="col-7">Not registered*</p>
-            {{/if}}
-          </div>
-          <div class="row">
-            <p class="col-5">Password: </p>
-            <a class="col-7" href="/user/changePassword">Change Password</a>
-          </div>
-          <div class="row">
-
-            <form action="" style="margin-top: 10px;" method="POST">
-              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{this.id}}">
-                Delete Account
-              </button>
-
-              <div class="modal" id="myModal_{{this.id}}">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <h4 class="modal-title">Delete Account Confirmation</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                      Are you sure you want to delete your account? You will no longer have an account with us...
-                    </div>
-
-                    <div class="modal-footer">
-                      <input type="submit" value="Delete" class="btn btn-danger">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-
-                  </div>
-                </div>
+          <div class="p-4 text-black" style="background-color: #f8f9fa;">
+            <div class="d-flex justify-content-end text-center py-1">
+              <div>
+                <p class="mb-1 h5">253</p>
+                <p class="small text-muted mb-0">Listings</p>
               </div>
-            </form>
-
-
+              {{!-- <div class="px-3">
+                <p class="mb-1 h5">1026</p>
+                <p class="small text-muted mb-0">Followers</p>
+              </div>
+              <div>
+                <p class="mb-1 h5">478</p>
+                <p class="small text-muted mb-0">Following</p>
+              </div> --}}
+            </div>
           </div>
-
-
-          <!-- <input type="submit" value="Add Product" class="btn btn-primary col py-3"/>
-      <button onclick="location.href = '/admin/inventory/retrieve_product';" id="goBack" class="align-right submit-button" >Go Back</button> -->
-
+          <div class="card-body p-4 text-black">
+            <div class="mb-5">
+              <p class="lead fw-normal mb-1">About</p>
+              <div class="p-4" style="background-color: #f8f9fa;">
+                <p class="font-italic mb-1">Web Developer</p>
+                <p class="font-italic mb-1">Lives in New York</p>
+                <p class="font-italic mb-0">Photographer</p>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0">Recent Listings</p>
+              <p class="mb-0"><a href="#" class="text-muted">Show all</a></p>
+            </div>
+            <div class="row g-2">
+              <div class="col mb-2">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                  alt="image 1" class="w-100 rounded-3">
+              </div>
+              <div class="col mb-2">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
+                  alt="image 1" class="w-100 rounded-3">
+              </div>
+            </div>
+            <div class="row g-2">
+              <div class="col">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
+                  alt="image 1" class="w-100 rounded-3">
+              </div>
+              <div class="col">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
+                  alt="image 1" class="w-100 rounded-3">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-</div>
+</section>
