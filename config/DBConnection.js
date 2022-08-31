@@ -24,6 +24,9 @@ const setUpDB = (drop) => {
             Msg.belongsTo(User)
             User.hasMany(Msg)
 
+            // Product.belongsTo(User)
+            // User.hasMany(Product)
+
             mySQLDB.sync({
                 alter: true,
                 force: drop

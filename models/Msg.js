@@ -6,7 +6,8 @@ class Msg extends sequelize.Model {
 }
 Msg.init({
     content: { type: sequelize.STRING, allowNull: false },
-    seen: { type: sequelize.BOOLEAN, allowNull: false, defaultValue: false }
+    seen: { type: sequelize.BOOLEAN, allowNull: false, defaultValue: false },
+    offer: { type: sequelize.BOOLEAN, allowNull: false, defaultValue: false }
 },
     {
         timestamps: true,

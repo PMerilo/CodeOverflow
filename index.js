@@ -34,12 +34,6 @@ const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
-
-    socket.on('chat:room', (chatId) => {
-        socket.join(`Chat ${chatId}`)
-        console.log(`${socket.id} has join room "Chat ${chatId}"`);
-    })
-
     messagingHandler(io, socket)
     console.log(`${socket.id} has connected`);
 }
