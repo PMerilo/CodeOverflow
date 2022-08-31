@@ -30,6 +30,7 @@
     "flash-messenger": "^1.1.1",
     "handlebars": "^4.7.7",
     "moment": "^2.29.4",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^2.3.3",
     "nodemon": "^2.0.19",
     "passport": "^0.6.0",

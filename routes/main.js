@@ -127,10 +127,7 @@ router.get('/login-google',
 router.get('/login-google/callback', 
   passport.authenticate('google', { failureRedirect: '/login',successRedirect: '/',failureFlash: true }))
 
-router.get('/profile', ensureAuthenticated, async (req, res) => {
 
-    res.render("profile")
-})
 router.get('/currentUser', (req, res, next) => {
     let data
     if (req.isAuthenticated()) {

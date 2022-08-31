@@ -29,3 +29,27 @@ if(formdata!=undefined){
 }
 
 });
+$('#pfpUpload').on('change', function () {
+    let formdata = new FormData();
+    let image = $("#pfpUpload")[0].files[0];
+    formdata.append('pfpUpload', image);
+    fetch('/user/upload', {
+        method: 'POST',
+        body: formdata
+    })
+        .then(res => res.json())
+        .then((data) => {
+            if (data.err) {
+                $('#pfpErr').text(data.err.message);
+                $('#pfpErr').show();
+            }
+            else {
+                if (data.file) {
+                    $('#pfp').attr('src', data.file);
+                    $('#pfpURL').attr('value', data.file); // set hidden field    
+                }
+                $('#pfpErr').hide();
+            }
+        })
+    
+    });
