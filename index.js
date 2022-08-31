@@ -13,6 +13,7 @@ const DBConnection = require('./config/DBConnection');
 
 //Routes
 const main = require('./routes/main')
+const transactions = require('./routes/transactions')
 const api = require('./routes/api')
 const inbox = require('./routes/inbox')
 
@@ -144,6 +145,7 @@ app.all("/*", (req, res, next) => {
 //Set layout for all routes
 
 app.use("/", main)
+app.use("/", transactions)
 app.use("/inbox", inbox)
 app.use("/api", api)
 app.use('/build/', express.static(path.join(__dirname, 'node_modules/three/build')));
