@@ -1,0 +1,105 @@
+<div class="admin-padding">
+  <div class="col py-3" style="width: 60%; margin:0 auto; background:white;box-shadow: 12px 12px 22px grey; border-radius:30px; padding: 40px;">
+    <h1 class="display-4">Edit Listing</h1><span id="datetime"></span>
+
+    {{#product}}
+    <form method="POST" action="/editListing/{{sku}}">
+      <div class="form-group col py-3" id="posterUpload-div">
+        <div id="drop-area">
+          <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload" accept="image/png,image/jpeg,image/jpg,image/gif,image/jfif" onchange="imagePreview(event);"/> 
+        </div>
+        <img src="/images/items/{{posterURL}}" id="output" width="500px" height="flex">
+
+      </div>
+      <div class="form-group col py-3"  id="div-category">
+        <label for="category">Category</label>
+        <select name="category" id="category" onchange="showMore()">
+          <option disabled="disabled">Select A Category</option>
+          <option value="T-Shirts & Tops" id="T-Shirts & Tops">T-Shirts & Tops</option>
+          <option value="Jeans & Joggers" id="Jeans & Joggers">Jeans & Joggers</option>
+          <option value="Shorts & Skirts" id="Shorts & Skirts">Shorts & Skirts</option>
+          <option value="Dresses" id="Dresses">Dresses</option>
+          <option value="Hoodies" id="Hoodies">Hoodies</option>
+        </select>
+
+      </div>
+      
+      <div class="form-group col py-3"  id="div-name">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control" value="{{name}}">
+
+      </div>
+      <div class="form-group col py-3"  id="div-price">
+        <label for="price">Price</label>
+        <input type="number" name="price" id="price" class="form-control" value="{{price}}" required>
+
+      </div>
+      <div class="form-group col py-3"  id="div-desc">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" cols="30" rows="10" class="form-control" required>{{description}}</textarea>
+      <input type="submit" value="Update" class="blue-btn"  id='submit'/>
+      {{/product}}
+    </form>
+  </div>
+</div>
+
+<style type="text/css">
+.blue-btn {
+    width: 10rem;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+.blue-btn:hover,
+.blue-btn:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+  .image-preview {
+    width: 300px;
+    min-height: 100px;
+    border: 1px solid #000;
+    margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #6c757d;
+  }
+
+  .image-preview__image {
+    display: none;
+    width: 20%;
+  }
+</style>
+
+<script>
+var parts = window.location.href.split('/');
+var lastSegment = parts.pop() || parts.pop();  // handle potential trailing slash
+window.addEventListener('load', setCat)
+
+  function imagePreview(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      var output = document.getElementById('output');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+function setCat(){
+  $.ajax({
+    method: "POST",
+    url: '/getCat/'+lastSegment,
+    success: function(data){
+      document.getElementById(data['category']).setAttribute("selected", "")
+    }
+  })
+}
+
+</script>

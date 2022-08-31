@@ -1,0 +1,89 @@
+{{#product}}
+<div class="container">
+    <div class="row align-items-start">
+        <div class="image col-md-12 border bg-secondary">
+            <center><img class='img-fluid align-items-center' src="/images/items/{{posterURL}}"></center>
+        </div>
+    </div>
+    <div class="item-right col-md-3 text-center" style="float: right">
+        <h3>{{Owner}}</h3>
+        <button class="modal-button buy"><span>buy</span></button>
+        <br>
+        <button class="modal-button chat"><span>Chat Now</span></button>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-10">
+            <h3 style="font-weight: normal;">{{name}}</h3>
+            <h3>${{price}}</h3>
+            <br>
+            <h4>Description</h4>
+            <p id="uploadedAt"></p>
+            <input type="hidden" value="{{createdAt}}" id="created">
+            <p>{{description}}</p>
+        </div>
+
+    </div>
+</div>
+{{/product}}
+
+<style>
+    .bg-secondary{
+        --bs-bg-opacity: 0.4;
+        background-color: lightgrey;!important
+    }
+    img{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        max-height: 400px;
+        float: center;
+    }
+    .item-right{
+        border: lightgrey solid 0.1px;
+        box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    .modal-button{
+        width: 80%;
+        text-align: center;
+        background-color: transparent;
+        border: solid 0.5px;
+        border-radius: 5px;
+        padding: 5px;
+        margin-bottom:20px;
+    }
+    .buy{
+        background-color: #fb1638;
+    }
+    .buy:hover{
+        background-color: #de0324;
+    }
+    .chat:hover{
+        background-color: lightgrey;
+    }
+    .image{
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+</style>
+<script>
+    window.addEventListener('load', function(){
+        uploaded = new Date(document.getElementById('created').value)
+        var present_date = new Date()
+        mmdiff = (present_date.getMonth() + 1) - (uploaded.getMonth() + 1)
+        yydiff = (present_date.getFullYear()) - (uploaded.getFullYear())
+        dddiff = (present_date.getDate()) - (uploaded.getDate())
+        if(yydiff > 1){
+            document.getElementById('uploadedAt').innerHTML = `posted<br>`+yydiff + ' years ago'
+        }else{
+            if(mmdiff > 1){
+                document.getElementById('uploadedAt').innerHTML = `posted<br>`+mmdiff + ' months ago'
+            }else{
+                if(dddiff >= 7){
+                    document.getElementById('uploadedAt').innerHTML = `posted<br>`+Math.ceil(dddiff/7) + ' weeks ago'
+                }else{
+                    document.getElementById('uploadedAt').innerHTML = `posted<br>`+dddiff + ' days ago'
+                }
+            }
+        }
+        console.log(dddiff)
+    })
+</script>
