@@ -8,8 +8,11 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
+const googlelogin = require('../helpers/googlelogin');
+googlelogin()
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
+
 
 router.get('/', async (req, res) => {
     res.render("index")
@@ -121,6 +124,12 @@ router.get('/logout', (req, res, next) => {
     res.redirect('/');
 });
 
+router.get('/login-google', 
+  passport.authenticate('google', { scope : ['profile', 'email'] }));
+ 
+router.get('/login-google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login',successRedirect: '/',failureFlash: true }))
+
 router.get('/createListing', (req, res) => {
     res.render('addListing')
 })
@@ -188,6 +197,7 @@ router.post('uploadsubmit', (req,res)=>{
 		fs.mkdirSync('./public/images/items/', {recursive: true})
 	}
 })
+
 
 router.get('/currentUser', (req, res, next) => {
     let data
