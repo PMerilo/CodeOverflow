@@ -76,7 +76,10 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             {{!-- if user is not authenticated --}}
             <li>
-              <a class="dropdown-item" href="/Profile">My Profile</a>
+              <a class="dropdown-item" href="/user/account">My Account</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/user/profile/{{user.id}}">My Profile</a>
             </li>
             <li>
               <a class="dropdown-item" href="/myOrders">My Orders</a>
