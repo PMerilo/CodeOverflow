@@ -41,5 +41,98 @@ router.post('/getCat/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id, {raw: true, attributes: ['category']});
     res.send(product)
 })
+router.post('/getProduct', async (req, res) => {
+    var page = req.body.page
+    if(page == undefined){
+        page = 0
+    }else{
+        page = parseInt(page)
+    }
+    var products  = await Product.findAndCountAll({
+        raw: true,
+        limit: 5,
+        offset: 5*page
+    })
+    res.send({
+        products: products.rows
+    })
+
+
+})
+
+router.post('/totalPages', async (req, res) => {
+    var products  = await Product.findAndCountAll({
+        raw: true,
+    })
+    res.send({page: Math.ceil(products.count/4)})
+})
+
+router.get('/createListing', (req, res) => {
+    res.render('addListing')
+})
+
+router.post('/getListing', async (req, res) => {
+    var page = req.body.page
+    if(page == undefined){
+        page = 0
+    }else{
+        page = parseInt(page)
+    }
+    var products  = await Product.findAndCountAll({
+        raw: true,
+        limit: 5,
+        offset: 5*page,
+        where: {OwnerID: req.user.id}
+    })
+    res.send({
+        products: products.rows
+    })
+})
+
+router.get('/myListing', (req, res) => {
+    res.render('myListing')
+})
+
+router.post('/createListing', (req, res) => {
+    let {name, category, price, description, posterUpload} = req.body;
+    Product.create({
+        name,
+        category,
+        price,
+        description,
+        posterURL:posterUpload,
+        quantity: 1,
+        OwnerID: req.user.id,
+        Owner: req.user.name
+    });
+    res.redirect('/myListing');
+});
+router.post('/upload', ensureAuthenticated, (req, res) => {
+    // Creates user id directory for upload if not exist
+    if (!fs.existsSync('./public/images/items/')) {
+        fs.mkdirSync('./public/images/items/', { recursive: true });
+    }
+    upload(req, res, (err) => {
+		console.log(req.file)
+        // console.log(req.file)
+        if (err) {
+            // e.g. File too large
+            res.json({ err: err });
+        }
+        else if (req.file == undefined) {
+            res.json({});
+        }
+        else {
+            res.json({ file: `/images/${req.file.originalname}` });
+        }
+    });
+});
+
+router.post('uploadsubmit', (req,res)=>{
+	let image = req.body
+	if (!fs.existsSync('./public/images/items/')){
+		fs.mkdirSync('./public/images/items/', {recursive: true})
+	}
+})
 
 module.exports = router
