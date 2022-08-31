@@ -1,5 +1,4 @@
 const socket = io({ autoConnect: false });
-
 $.get('/currentUser', ({userId}) => {
     if (userId) {
         socket.auth = { userId }
@@ -9,4 +8,3 @@ $.get('/currentUser', ({userId}) => {
 socket.onAny((event, ...args) => {
     console.log(event, args);
 });
-

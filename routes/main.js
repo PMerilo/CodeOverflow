@@ -15,33 +15,7 @@ const upload = require('../helpers/productUpload');
 
 
 router.get('/', async (req, res) => {
-    res.render("index")
-})
-router.post('/getProduct', async (req, res) => {
-    var page = req.body.page
-    if(page == undefined){
-        page = 0
-    }else{
-        page = parseInt(page)
-    }
-    var products  = await Product.findAndCountAll({
-        raw: true,
-        limit: 5,
-        offset: 5*page
-    })
-    console.log(page)
-    res.send({
-        products: products.rows
-    })
-
-
-})
-
-router.post('/totalPages', async (req, res) => {
-    var products  = await Product.findAndCountAll({
-        raw: true,
-    })
-    res.send({page: Math.ceil(products.count/4)})
+    res.render("index2")
 })
 
 
@@ -123,7 +97,6 @@ router.get('/logout', (req, res, next) => {
     req.logout(next);
     res.redirect('/');
 });
-
 router.get('/login-google', 
   passport.authenticate('google', { scope : ['profile', 'email'] }));
  
@@ -197,7 +170,6 @@ router.post('uploadsubmit', (req,res)=>{
 		fs.mkdirSync('./public/images/items/', {recursive: true})
 	}
 })
-
 
 router.get('/currentUser', (req, res, next) => {
     let data

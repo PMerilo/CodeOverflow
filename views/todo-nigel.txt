@@ -1,7 +1,22 @@
-edit listing - 20%
-create listing - done (will improve if got time)
+edit listing - done
+create listing - done (will improve if got time) - improved somewhat
 infinite scrolling - done
-delete listing
-carbon footprint calculator
-sorting of category
-sorting by price
+delete listing - done
+carbon footprint calculator - scraped idea
+sorting of category - done
+sorting by price - done (might still be buggy)
+
+NOTES:
+
+by thrifting, we are able to save about 500 pounds of carbon emission every year.
+It reduces our water, reduce our water, waste and carbon footprint by more than 80%
+
+
+recent commit:
+    1. viewing page when user clicks on the product
+    2. viewing page for "myListing"
+    3. landing page when user click on a product in "myListing"
+    4. new product page - index2.handlebars
+    5. added product.css
+    6. chat not linked to anything for the moment
+    7. ensureAuthenticated was redirecting to /user/login which does not exist so i changed it to /login
