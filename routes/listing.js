@@ -134,8 +134,13 @@ router.get('/myListing', (req, res) => {
     res.render('myListing')
 })
 
-router.post('/deleteListing/:id', (req, res) => {
-    Product.destroy({where: {sku: req.params.id}})
+router.post('/deleteListing/:id', async (req, res) => {
+    ownerId = await Product.findByPk(req.params.id, {raw: true, attributes: ['OwnerID']});
+    if(req.user.id == ownerId.OwnerID){
+        Product.destroy({where: {sku: req.params.id}})
+        flashMessage(res, 'success', 'Listing has been deleted successfully')
+    }
+    res.redirect('/myListing')
 })
 
 router.post('/createListing', (req, res) => {
