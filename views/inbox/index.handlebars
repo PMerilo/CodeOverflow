@@ -1,41 +1,5 @@
 <div class="shadow-sm container-fluid rounded border col-10 d-flex flex-column" style="height: calc(100vh - 102px); ">
-    {{!-- <div class="row gx-5 border-bottom">
-        <div class="col-4 border-end d-flex align-items-center justify-content-center">
-            <div class="fs-4">
-                Search
-            </div>
-        </div>
-        <div class="col-8">
-            <div class="d-flex px-4 py-2 align-items-center">
-                <div class="p-2">
-                    <img class="rounded-circle img-fluid" width="40" src="/images/avatars/avatar1.jpg" alt="">
-                </div>
-                <div class="px-5 fs-4">
-                    Name
-                </div>
-                <div class="ms-auto">
-                    <button class="btn">
-                        <i class="fs-4 bi bi-info-circle"></i>
-                    </button>
-                </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="row gx-5">
-        <div class="col-4 border-end py-3">
-            <div class="hstack gap-4">
-                <img class="rounded-circle img-fluid" width="60" src="/images/avatars/avatar1.jpg" alt="">
-                <div class="d-flex flex-column justify-content-center">
-                    <span>Name</span>
-                    <span>Last MEssage</span>
-                </div>
-            </div>
-        </div>
-        <div class="col-8 px-5">
-
-        </div>
-    </div> --}}
     <div class="row">
         <div class="col-xxl-3 col-sm-4 p-0 align-self-stretch">
             <div class="border-bottom border-end h-100">
@@ -116,9 +80,6 @@
 </div>
 <script defer>
     $(document).ready(function () {
-
-        socket.emit('chat:room', '1')
-
         let prevHref = [];
         let chatId;
 
@@ -135,7 +96,7 @@
             var id = this.href.split('/').pop()
             chatId = id
             $('#chat-panel').empty()
-            $.get(`/msg?id=${id}`, (data) => {
+            $.get(`/inbox/${chatId}`, (data) => {
                 data.msgs.forEach(msg => {
                     var owner = msg.userId == {{user.id}}
                     $('#chat-panel').append( msgFormater(owner, msg.content))
@@ -184,14 +145,14 @@
                     return false;
                 }
 
-                msg = { content: msg, chatId: chatId , userId: id }
+                //msg = { content: msg, productId: chatId }
                 // Emit message to server
                 socket.emit('message:sent', {msg});
 
                 // Clear input
                 e.target.elements.msg.value = '';
                 e.target.elements.msg.focus();
-                $.post("/msg", msg)
+                //$.post("/inbox/send", msg)
             });
 
         

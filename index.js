@@ -14,6 +14,7 @@ const DBConnection = require('./config/DBConnection');
 //Routes
 const main = require('./routes/main')
 const api = require('./routes/api')
+const inbox = require('./routes/inbox')
 
 
 app.use('/webhook', express.raw({type: "*/*"}));
@@ -25,11 +26,20 @@ app.use(bodyparser.urlencoded({ extended: false }))
 const httpServer = createServer(app);
 const io = new Server(httpServer, { cors: { origin: "*" } });
 
+const messagingHandler = require("./sockets/messaging")
+
 const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
-	
+
+    socket.on('chat:room', (chatId) => {
+        socket.join(`Chat ${chatId}`)
+        console.log(`${socket.id} has join room "Chat ${chatId}"`);
+    })
+
+    messagingHandler(io, socket)
+    console.log(`${socket.id} has connected`);
 }
 
 io.on("connection", onConnection);
@@ -134,6 +144,7 @@ app.all("/*", (req, res, next) => {
 //Set layout for all routes
 
 app.use("/", main)
+app.use("/inbox", inbox)
 app.use("/api", api)
 
 
