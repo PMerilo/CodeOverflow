@@ -5,7 +5,7 @@ const ensureAuthenticated = (req, res, next) => {
         return next();
     }
     flashMessage(res, 'error', 'Please Login First!');
-    res.redirect('/user/login');
+    res.redirect('/login');
 };
 
 module.exports = ensureAuthenticated;
