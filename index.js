@@ -146,8 +146,8 @@ app.all("/*", (req, res, next) => {
 app.use("/", main)
 app.use("/inbox", inbox)
 app.use("/api", api)
-
-
+app.use('/build/', express.static(path.join(__dirname, 'node_modules/three/build')));
+app.use('/jsm/', express.static(path.join(__dirname, 'node_modules/three/examples/jsm')));
 
 const port = 5000;
 
