@@ -32,7 +32,7 @@ $('#posterUpload').on('change', function () {
         })
 }
 
-});
+);
 $('#pfpUpload').on('change', function () {
     let formdata = new FormData();
     let image = $("#pfpUpload")[0].files[0];

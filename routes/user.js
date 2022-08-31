@@ -5,6 +5,7 @@ const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/imageUpload');
 const User = require('../models/User');
+const bcrypt = require('bcryptjs')
 
 router.get('/profile', ensureAuthenticated, async (req, res) => {
     user = await User.findByPk(req.user.id)
@@ -18,12 +19,13 @@ router.post('/profile', ensureAuthenticated, async (req, res) => {
 })
 
 router.get('/editProfile', ensureAuthenticated, async (req, res) => {
-    res.render("user/editProfile")
+    user = await User.findByPk(req.user.id)
+    res.render("user/editProfile", {user})
 })
 
 router.post('/editProfile', ensureAuthenticated, async (req, res) => {
     let {pfpUrl, name, email1, phoneNumber, gender} = req.body
-    if (phoneNumber == '' || phoneNumber == NaN) {
+    if (phoneNumber == '' || phoneNumber == NaN || phoneNumber == null) {
         phoneNumber = null
     } else {
         phoneNumber = parseInt(phoneNumber)
@@ -54,10 +56,7 @@ router.post('/editProfile', ensureAuthenticated, async (req, res) => {
             res.redirect('/user/profile')
         })
         .catch(err => console.log(err))
-    }
-    
-
-    
+    } 
 })
 
 router.post('/upload', ensureAuthenticated, (req, res) => {
@@ -76,4 +75,41 @@ router.post('/upload', ensureAuthenticated, (req, res) => {
         }
     });
 });
+
+router.get('/changePassword', ensureAuthenticated, async (req, res) => {
+    user = await User.findByPk(req.user.id)
+    res.render("user/changePassword", {user})
+})
+
+router.post('/changePassword', ensureAuthenticated, async (req, res) => {
+    user = await User.findByPk(req.user.id)
+    let { oldpassword, newpassword, newpassword2 } = req.body;
+    const validPassword = await bcrypt.compare(oldpassword, user.password);
+    if (!validPassword) {
+        flashMessage(res, 'error', 'Incorrect password');
+        res.redirect('/user/changePassword')
+    }
+    else if (newpassword.length < 8) {
+        flashMessage(res, 'error', 'Password must be at least 8 characters');
+        res.redirect('/user/changePassword')
+    }
+    else if (newpassword2 != newpassword) {
+        flashMessage(res, 'error', 'New passwords do not match');
+        res.redirect('/user/changePassword')
+    }
+    else if (oldpassword == newpassword) {
+        flashMessage(res, 'error', 'New and old passwords are the same');
+        res.redirect('/user/changePassword')
+    } else {
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(newpassword, salt);
+        await User.update(
+            {password: hash},
+            {where :{id: id}}
+        ).then((user) => {
+            flashMessage(res, 'success', 'Password has been changed');
+            res.redirect(`/user/profile`);
+        }).catch(err =>  console.log(err));
+    }
+})
 module.exports = router
