@@ -91,6 +91,7 @@ app.use(passport.session());
 const flash = require('connect-flash');
 app.use(flash());
 const flashMessenger = require('flash-messenger');
+const ensureAuthenticated = require("./helpers/auth");
 app.use(flashMessenger.middleware);
 
 // Place to define global variables
@@ -144,7 +145,7 @@ app.all("/*", (req, res, next) => {
 //Set layout for all routes
 
 app.use("/", main)
-app.use("/inbox", inbox)
+app.use("/inbox", ensureAuthenticated, inbox)
 app.use("/api", api)
 
 
