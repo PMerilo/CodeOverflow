@@ -5,7 +5,9 @@ const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/imageUpload');
 const User = require('../models/User');
-const bcrypt = require('bcryptjs')
+const Wishlist = require('../models/Wishlist');
+const bcrypt = require('bcryptjs');
+const Product = require('../models/Product');
 
 router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
     user = await User.findByPk(req.params.id)
@@ -123,5 +125,73 @@ router.post('/changePassword', ensureAuthenticated, async (req, res) => {
             res.redirect(`/user/profile`);
         }).catch(err =>  console.log(err));
     }
+})
+
+router.get('/addtowishlist/:id', async (req, res) => {
+    if (req.user.id) {
+        product = await Product.findByPk(req.params.id);
+        wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})
+        if (product) {
+            if (!wishlist) {
+                await Wishlist.create({userId: req.user.id,productSku: req.params.id})
+                .then((product) => {
+                    flashMessage(res,'success', 'Listing added to wishlist');
+                    res.redirect('/'); //change to listing page
+                })
+                .catch(err => console.log(err))
+            } else {
+                flashMessage(res,'error', 'Listing already in wishlist');
+                res.redirect('/'); //change to listing page
+            }
+            
+        } else {
+            flashMessage(res, 'error', 'No listing found');
+            res.redirect('/'); //change to listing page
+        }
+    } else {
+        flashMessage(res, 'error', 'Please log in to add listing to wishlist');
+        res.redirect('/login');
+    }
+    
+})
+
+router.get('/deletewishlist/:id', async (req, res) => {
+    if (req.user.id) {
+        product = await Product.findByPk(req.params.id);
+        wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})
+        if (product) {
+            if (wishlist) {
+                await Wishlist.destroy({where: {productSku: req.params.id}})
+                .then((product) => {
+                    flashMessage(res,'success', 'Listing deleted from wishlist');
+                    res.redirect('/'); //change to listing page
+                })
+                .catch(err => console.log(err))
+            } else {
+                flashMessage(res,'error', 'Listing is not in wishlist');
+                res.redirect('/'); //change to listing page
+            }
+            
+        } else {
+            flashMessage(res, 'error', 'No listing found');
+            res.redirect('/'); //change to listing page
+        }
+    } else {
+        flashMessage(res, 'error', 'Please log in to delete listing from wishlist');
+        res.redirect('/login');
+    }
+    
+})
+
+router.get('/wishlist', ensureAuthenticated, async (req, res) => {
+    const wishlist = await Wishlist.findAndCountAll(
+        {where: {id: req.user.id},
+        include: {model: Product,
+        required: true}, 
+    })
+    const metadata = {wishlist: wishlist.rows,wishlist_count: wishlist.count,}
+    // console.log(wishlist.rows[0].dataValues.id)
+    // console.log(wishlist.rows[0])
+    res.render("wishlist", metadata)
 })
 module.exports = router
