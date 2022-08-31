@@ -13,7 +13,10 @@ const setUpDB = (drop) => {
             The primary key from user will be a foreign key in video.
             */
             Chat.belongsTo(User, {as: "buyer", foreignKey: 'buyerId'} )
-            User.hasMany(Chat)
+            User.hasMany(Chat, {as: "buyer", foreignKey: 'buyerId'} )
+
+            Chat.belongsTo(Product, {as: "product", foreignKey: 'productId'} )
+            Product.hasMany(Chat, {as: "product", foreignKey: 'productId'} )
 
             Msg.belongsTo(Chat)
             Chat.hasMany(Msg)

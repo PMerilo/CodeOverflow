@@ -7,7 +7,7 @@ class Product extends sequelize.Model{
 
 }
 Product.init({
-        sku:{type: sequelize.INTEGER, primaryKey: true},
+        sku:{type: sequelize.INTEGER, primaryKey: true, autoIncrement: true},
         name: { type: sequelize.STRING }, 
         description: { type: sequelize.STRING(2000) }, 
         price: { type: sequelize.FLOAT }, 

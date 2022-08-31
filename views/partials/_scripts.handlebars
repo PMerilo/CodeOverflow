@@ -8,8 +8,7 @@
 <script src="https://unpkg.com/bootstrap-table@1.20.2/dist/bootstrap-table.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imask/3.4.0/imask.min.js"></script>
 
-{{!--
-<script src="/js/demo/data-tables.js"></script>
+{{!-- <script src="/js/demo/data-tables.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/demo/chart-area-demo.js"></script>
 <script src="/js/demo/chart-bar-demo.js"></script>
@@ -18,8 +17,7 @@
 <script src="/js/js-snackbar.js"></script> --}}
 
 
-{{!--
-<script src="/scripts/iconToggles.js"></script>
+{{!-- <script src="/scripts/iconToggles.js"></script>
 <script src="/scripts/cart.js" async></script>
 <script src="/scripts/multistep-form.js"></script>
 <script src="/scripts/payment.js"></script>
@@ -29,15 +27,4 @@
 <script src="http://thecodeplayer.com/uploads/js/jquery.easing.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-    const socket = io({ autoConnect: false });
-    $.get('/currentUser', ({userId}) => {
-        if (userId) {
-            socket.auth = { userId }
-            socket.connect()
-        }
-    })
-    socket.onAny((event, ...args) => {
-        console.log(event, args);
-    });
-</script>
+<script src="/scripts/socket.js"></script>
