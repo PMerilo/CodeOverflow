@@ -80,6 +80,7 @@
 </div>
 <script defer>
     $(document).ready(function () {
+        socket.emit('chat:join', '1')
         let prevHref = [];
         let chatId;
 
