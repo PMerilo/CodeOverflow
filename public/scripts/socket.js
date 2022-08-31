@@ -11,7 +11,6 @@ socket.onAny((event, ...args) => {
 });
 
 socket.on('connect', () => {
-    console.log('yes');
     $.get('/api/user/chats', (chats) => {
         for (const chat of chats) {
             socket.emit('chat:join', chat.id)

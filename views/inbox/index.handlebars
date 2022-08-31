@@ -17,6 +17,7 @@
                         <img class="rounded-circle img-fluid" width="40" src="/images/avatars/avatar1.jpg" alt="">
                     </div>
                     <div class="px-5 fs-4 chat-name">
+                        {{currentchat.name}}
                     </div>
                     <div class="ms-auto">
                         <button class="btn" id="info">
@@ -51,12 +52,12 @@
         <div class="col-xxl-9 col-sm-8 p-0 vstack" style="height:100%;">
             <div class="border-bottom" id="product" style="display: none;">
                 <div class="d-flex align-items-center">
-                    <img src="" height="50px" width="50px" class="m-3" alt="">
+                    <img src="/images/items/{{currentchat.product.posterURL}}" height="50px" width="50px" class="m-3" alt="">
                     <div class="product-info">
-                        <p class="m-0 product-name"></p>
-                        <p class="m-0 product-price"></p>
+                        <p class="m-0 product-name">{{currentchat.product.name}}</p>
+                        <p class="m-0 product-price">{{currentchat.product.price}}</p>
                     </div>
-                    <div class="product-footer ms-auto">
+                    <div class="product-footer ms-auto offer-btn">
                         <button class="btn btn-primary mx-3">Make Offer</button>
                     </div>
                 </div>
@@ -186,7 +187,7 @@
             msg = { content: msg, productId: $chatForm.attr('data-bs-id'), chatId: window.location.pathname.split('/')[2] == 'new' ? '' : window.location.pathname.split('/').pop() }
             $.post("/inbox/send", msg, (data) => {
                 if (window.location.pathname.split('/')[2] == 'new') {
-                    //socket.emit('chat:join', data.chatId)
+                    socket.emit('chat:join', data.chatId)
                     window.history.pushState('page2', '', `/inbox/${data.chatId}`);
                 }
 
