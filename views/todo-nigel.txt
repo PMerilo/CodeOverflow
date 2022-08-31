@@ -1,7 +1,12 @@
 edit listing - done
-create listing - done (will improve if got time)
+create listing - done (will improve if got time) - improved somewhat
 infinite scrolling - done
-delete listing
-carbon footprint calculator
-sorting of category
-sorting by price
+delete listing - done
+carbon footprint calculator - scraped idea
+sorting of category - done
+sorting by price - done (might still be buggy)
+
+NOTES:
+
+by thrifting, we are able to save about 500 pounds of carbon emission every year.
+It reduces our water, reduce our water, waste and carbon footprint by more than 80%

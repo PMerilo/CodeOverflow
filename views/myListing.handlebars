@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="styles/product.css">
+
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
@@ -53,56 +55,136 @@ window.addEventListener('load', loadProduct)
 window.addEventListener('scroll', loadProduct)
 
 var working = false
-function loadProduct(){
-  if(working == false){
-    working = true
-    $.ajax({
+function loadProduct() {
+    if(working == false){
+        working = true;
+        $.ajax({
     method: 'post',
     url: '/getListing',
     data: {
-      page: page
+      page: page,
     },
     success: function(data){
       products = data['products']
-  for(var a in products){
-    price = products[a]['price']
-    image = products[a]['image']
-    name = products[a]['name']
-    desc = products[a]['description']
-    sku = products[a]['sku']
-    posterURL = products[a]['posterURL']
-    if(posterURL.length == 0){
-      posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
-              height="372px">`
-    }else{
-      posterURL = `<img class="card-img-top product-image" src="/images/items/`+posterURL+`" alt="Card image cap" width="153px"
-              height="372px">`
-    }
-    reviews_given = products[a]['reviews_given']
-    stars = products[a]['stars_given']
-    $('.product-items').append(`  
-        <div class="col col-12 col-xs-12 col-md-6 col-lg-4 col-xl-3" id="product_card">
-          <div class="card">
-            `+posterURL+`
-            <div class="card-button">
-              <button type="button" class="show-item" value="`+sku+`">
-                <a href="/editListing/`+sku+`" style="text-decoration: none;">Edit this listing</a>
-              </button>
-            </div>
-          </div>
-      </div>`)
-    }
-    if(page < totalPages){
-        page += 1
-        }else{
-        window.removeEventListener("scroll", loadProduct)
-    }
-    console.log(page)
-    setTimeout(function(){
+                    products = data['products']
+                for(var a in products){
+                    id = products[a]['sku']
+                    image = products[a]['posterURL']
+                    price = products[a]['price']
+                    name = products[a]['name']
+                    desc = products[a]['description']                    
+                    price_info = `<p class = "product-price"></p>
+                                    <p class = "product-price">$`+parseFloat(price)+`</p>
+                                    </div>`
+                    modal_id = "#details_" + id
+                    image = `<img src="/images/items/`+ image + `" style="width: 100%; max-height: 100%;">`
+                    btns = `<button class="btn-buy" style="text-decoration: none; color: black; text-align:center;">
+                        <a href="/viewOneListing/`+id+`">details</a>
+                        </button>`
+
+                    productInfo = `<div class="product-info">
+                                        <div class="product-info-top">
+                                            <h2 class = "sm-title">`+products[a]['Owner'] +`</h2>
+                                        </div>
+                                        <a href="/viewOneListing/`+id+`" class="product-name">`+name+`</a>
+                                        `+price_info
+                      image_id = `<div class='product-img'><a href="/viewOneListing/`+id+`">`+image+`</a></div>`                                                                                                                                                                                                   
+                      $(".product-items").append(`<div class='product'><div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div>`+productInfo+`</div>`)
+                      /*$('body').append(modal)*/
+
+                }
+                page += 1
+                setTimeout(function(){
                     working = false;
-    }, 500)
+                }, 500)
+            }
+            })
+
     }
-  })
-  }
 }
 </script>
+<style>
+  .cleared{
+  color: grey
+}
+
+.price-input{
+  width: 100%;
+  display: flex;
+  margin: 30px 0 35px;
+}
+.price-input .field{
+  display: flex;
+  width: 100%;
+  height: 45px;
+  align-items: center;
+}
+.field input{
+  width: 100%;
+  height: 100%;
+  outline: none;
+  font-size: 19px;
+  margin-left: 12px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid #999;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.price-input .separator{
+  width: 130px;
+  display: flex;
+  font-size: 19px;
+  align-items: center;
+  justify-content: center;
+}
+.slider{
+  height: 5px;
+  position: relative;
+  background: #ddd;
+  border-radius: 5px;
+}
+.slider .progress{
+  height: 100%;
+  left: 25%;
+  right: 25%;
+  position: absolute;
+  border-radius: 5px;
+  background: #17A2B8;
+}
+.range-input{
+  position: relative;
+}
+.range-input input{
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  top: -5px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  height: 17px;
+  width: 17px;
+  border-radius: 50%;
+  background: #17A2B8;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+input[type="range"]::-moz-range-thumb{
+  height: 17px;
+  width: 17px;
+  border: none;
+  border-radius: 50%;
+  background: #17A2B8;
+  pointer-events: auto;
+  -moz-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+</style>

@@ -20,6 +20,13 @@
     <img src="images/banner5.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
   </div>
 </div>
+  <select name="sort" id="sort" onchange="submitSorting(this)">
+          <option disabled="disabled" id='default-option'selected>sort by</option>
+          <option value="Highest To Lowest" id="Highest-To-Lowest">Highest To Lowest</option>
+          <option value="Lowest To Highest" id="Lowest-To-Highest">Lowest To Highest</option>
+          <option value="Most Recent" id="Most-Recent">Most Recent</option>
+          <option value="Oldest to Newest" id="Oldest-to-Newest">Oldest to Newest</option>
+        </select>
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
@@ -85,8 +92,34 @@ $.ajax({
 })
 
 window.addEventListener('load', loadProduct)
+window.addEventListener('load', setSort)
 window.addEventListener('scroll', loadProduct)
 
+
+function submitSorting(element){
+  if(category == "" || category == null){
+    window.location.replace('/?sortby='+element.value)
+  }else{
+    window.location.replace('/?category='+category+'&sortby='+element.value)
+  }
+}
+
+function getParameterByName(name, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+var category = getParameterByName('category')
+var sortby = getParameterByName('sortby')
+function setSort(){
+  sortby = sortby.split(' ').join('-')
+  document.getElementById('default-option').removeAttribute('selected')
+  document.getElementById(sortby).setAttribute('selected', 'true')
+}
 
 var working = false
 function loadProduct(){
@@ -94,9 +127,10 @@ function loadProduct(){
     working = true
     $.ajax({
     method: 'post',
-    url: '/getProduct',
+    url: '/getProduct?category='+category,
     data: {
-      page: page
+      page: page,
+      sortby: sortby
     },
     success: function(data){
       products = data['products']
@@ -180,7 +214,6 @@ function loadProduct(){
     }else{
       window.removeEventListener("scroll", loadProduct)
     }
-    console.log(page)
     setTimeout(function(){
                     working = false;
                 }, 500)

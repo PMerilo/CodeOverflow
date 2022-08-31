@@ -1,0 +1,222 @@
+{{#product}}
+<div class="container">
+    <div class="row align-items-start">
+        <div class="image col-md-12 border bg-secondary">
+            <center><img class='img-fluid align-items-center' src="/images/items/{{posterURL}}"></center>
+        </div>
+    </div>
+    <div class="item-right col-md-3 text-center" style="float: right">
+        <h3>{{Owner}}</h3>
+        <button class="modal-button chat"><span>view chats</span></button>
+        <button class="modal-button other">
+            <img src="https://mweb-cdn.karousell.com/build/listing-edit-280S39ckEp.svg" style="width: 16px !important;">
+                <span><a href="/editListing/{{sku}}">
+                    Editing Listing</a>
+                </span>
+            </button>
+        <button class="modal-button other">
+            <img src="https://mweb-cdn.karousell.com/build/listing-sold-3z-PEti8bN.svg" style="width: 16px !important;">
+            <span>Mark as Sold</span>
+            </button>
+        <button class="modal-button other delete" data-bs-toggle="modal" data-bs-target="#myModal">
+            <img src="https://mweb-cdn.karousell.com/build/listing-delete-3DSVB-Tit_.svg" style="width: 16px !important;">
+                <span>
+                    Delete
+                </span>
+            </button>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-md-10">
+            <h3 style="font-weight: normal;">{{name}}</h3>
+            <h3>${{price}}</h3>
+            <br>
+            <h4>Description</h4>
+            <p id="uploadedAt"></p>
+            <input type="hidden" value="{{createdAt}}" id="created">
+            <p>{{description}}</p>
+        </div>
+
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header flex-column">
+				<div class="icon-box">
+					<i class="material-icons">&#xE5CD;</i>
+				</div>						
+				<h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>Do you really want to delete this listing? This process cannot be undone.</p>
+			</div>
+			<div class="modal-footer justify-content-center">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-danger">Delete</button>
+			</div>
+		</div>
+	</div>
+</div>    
+{{/product}}
+
+<style>
+    .modal-confirm {		
+	color: #636363;
+	width: 400px;
+}
+.modal-confirm .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	border: none;
+	text-align: center;
+	font-size: 14px;
+}
+.modal-confirm .modal-header {
+	border-bottom: none;   
+	position: relative;
+}
+.modal-confirm h4 {
+	text-align: center;
+	font-size: 26px;
+	margin: 30px 0 -10px;
+}
+.modal-confirm .close {
+	position: absolute;
+	top: -5px;
+	right: -2px;
+}
+.modal-confirm .modal-body {
+	color: #999;
+}
+.modal-confirm .modal-footer {
+	border: none;
+	text-align: center;		
+	border-radius: 5px;
+	font-size: 13px;
+	padding: 10px 15px 25px;
+}
+.modal-confirm .modal-footer a {
+	color: #999;
+}		
+.modal-confirm .icon-box {
+	width: 80px;
+	height: 80px;
+	margin: 0 auto;
+	border-radius: 50%;
+	z-index: 9;
+	text-align: center;
+	border: 3px solid #f15e5e;
+}
+.modal-confirm .icon-box i {
+	color: #f15e5e;
+	font-size: 46px;
+	display: inline-block;
+	margin-top: 13px;
+}
+.modal-confirm .btn, .modal-confirm .btn:active {
+	color: #fff;
+	border-radius: 4px;
+	background: #60c7c1;
+	text-decoration: none;
+	transition: all 0.4s;
+	line-height: normal;
+	min-width: 120px;
+	border: none;
+	min-height: 40px;
+	border-radius: 3px;
+	margin: 0 5px;
+}
+.modal-confirm .btn-secondary {
+	background: #c1c1c1;
+}
+.modal-confirm .btn-secondary:hover, .modal-confirm .btn-secondary:focus {
+	background: #a8a8a8;
+}
+.modal-confirm .btn-danger {
+	background: #f15e5e;
+}
+.modal-confirm .btn-danger:hover, .modal-confirm .btn-danger:focus {
+	background: #ee3535;
+}
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+    a{
+        text-decoration: none;
+        color: black;
+    }
+    a:hover{
+        text-decoration: none;
+        color: black;
+    }
+    .bg-secondary{
+        --bs-bg-opacity: 0.4;
+        background-color: lightgrey;!important
+    }
+    img{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        max-height: 400px;
+        float: center;
+    }
+    .item-right{
+        border: lightgrey solid 0.1px;
+        box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    .modal-button{
+        width: 80%;
+        text-align: center;
+        background-color: transparent;
+        border: solid 0.5px;
+        border-radius: 5px;
+        padding: 5px;
+        margin-bottom:20px;
+    }
+    .chat{
+        background-color: #fb1638;
+        color: white;
+    }
+    .chat:hover{
+        background-color: #de0324;
+    }
+    .other:hover{
+        background-color: lightgrey;
+    }
+    .other{
+        border: none;
+        margin-bottom: 0px;
+        text-align: left;
+    }
+    .image{
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .delete{
+        color: red;
+    }
+</style>
+<script>
+    window.addEventListener('load', function(){
+        uploaded = new Date(document.getElementById('created').value)
+        var present_date = new Date()
+        mmdiff = (present_date.getMonth() + 1) - (uploaded.getMonth() + 1)
+        yydiff = (present_date.getFullYear()) - (uploaded.getFullYear())
+        dddiff = (present_date.getDate()) - (uploaded.getDate())
+        if(yydiff > 1){
+            document.getElementById('uploadedAt').innerHTML = `posted<br>`+yydiff + ' years ago'
+        }else{
+            if(mmdiff > 1){
+                document.getElementById('uploadedAt').innerHTML = `posted<br>`+mmdiff + ' months ago'
+            }else{
+                if(dddiff >= 7){
+                    document.getElementById('uploadedAt').innerHTML = `posted<br>`+Math.ceil(dddiff/7) + ' weeks ago'
+                }else{
+                    document.getElementById('uploadedAt').innerHTML = `posted<br>`+dddiff + ' days ago'
+                }
+            }
+        }
+        console.log(dddiff)
+    })
+</script>

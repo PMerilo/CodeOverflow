@@ -12,7 +12,7 @@ const fs = require('fs');
 const upload = require('../helpers/productUpload');
 
 router.get('/', async (req, res) => {
-    res.render("index")
+    res.render("index2")
 })
 
 

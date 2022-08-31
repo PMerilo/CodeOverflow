@@ -10,6 +10,66 @@ const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
+const sequelize = require('sequelize');
+const op = sequelize.Op
+
+router.post('/getProduct', async (req, res) => {
+    var category = req.query.category
+    if(category == undefined || category == "null"){
+        category = ""
+    }
+    var sortby = req.body.sortby
+    if(sortby == "Lowest To Highest"){
+        sortby = [["price", 'ASC']]
+    }else if(sortby == 'Most Recent'){
+        sortby = [['sku', 'DESC']]
+    }else if(sortby == 'Highest To Lowest'){
+        sortby = [['price', 'DESC']]
+    }else{
+        sortby = [['sku', 'ASC']]
+    }
+
+    var page = req.body.page
+    if(page == undefined){
+        page = 0
+    }else{
+        page = parseInt(page)
+    }
+    var products  = await Product.findAndCountAll({
+        where: {
+            category: 
+            {
+                [op.like]:'%'+category+'%'
+            }
+        },
+        order: sortby,
+        raw: true,
+        limit: 5,
+        offset: 5*page,
+    })
+    res.send({
+        products: products.rows
+    })
+    
+    
+})
+
+router.post('/totalPages', async (req, res) => {
+    var products  = await Product.findAndCountAll({
+        raw: true,
+    })
+    res.send({page: Math.ceil(products.count/4)})
+})
+
+router.get('/viewProduct/:id', async (req, res) => {
+    var product = await Product.findByPk(req.params.id,
+         {
+            raw: true,
+        });
+    res.render('viewProduct', {product: product});
+})
+
+router.use(ensureAuthenticated)
 
 router.get('/editListing/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id, {raw: true});
@@ -41,31 +101,12 @@ router.post('/getCat/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id, {raw: true, attributes: ['category']});
     res.send(product)
 })
-router.post('/getProduct', async (req, res) => {
-    var page = req.body.page
-    if(page == undefined){
-        page = 0
-    }else{
-        page = parseInt(page)
-    }
-    var products  = await Product.findAndCountAll({
-        raw: true,
-        limit: 5,
-        offset: 5*page
-    })
-    res.send({
-        products: products.rows
-    })
 
-
+router.get('/viewOneListing/:id', async (req, res) => {
+    var product = await Product.findByPk(req.params.id, {raw: true})
+    res.render('viewOneListing', {product: product})
 })
 
-router.post('/totalPages', async (req, res) => {
-    var products  = await Product.findAndCountAll({
-        raw: true,
-    })
-    res.send({page: Math.ceil(products.count/4)})
-})
 
 router.get('/createListing', (req, res) => {
     res.render('addListing')
@@ -91,6 +132,10 @@ router.post('/getListing', async (req, res) => {
 
 router.get('/myListing', (req, res) => {
     res.render('myListing')
+})
+
+router.post('/deleteListing/:id', (req, res) => {
+    Product.destroy({where: {sku: req.params.id}})
 })
 
 router.post('/createListing', (req, res) => {
