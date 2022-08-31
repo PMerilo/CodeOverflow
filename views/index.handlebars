@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
-<div class="slider-nav">
+{{!-- <div class="slider-nav">
   <div class="slide1">
     <img src="images/banner.jpg" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
   </div>
@@ -19,13 +19,53 @@
   <div class="slide45">
     <img src="images/banner5.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
   </div>
+</div> --}}
+<div class="landing">
+  <div class="title-container">
+    <div class="title">
+      <h3>"That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human
+        being
+        who ever was, lived out their lives."</h3>
+      <h4>~ Carl Sagon</h4>
+    </div>
+  </div>
+  <canvas id="c"></canvas>
 </div>
+<canvas class="webgl"></canvas>
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
   </div>
 </div>
+<style>
+  .landing {
+    background-color: black;
+  }
 
+  .title-container {
+    position: absolute;
+    padding-left: 20px;
+    width: 35%;
+    height: auto;
+    top: 30%;
+    left: 0%;
+    transform: translateY(-50%);
+  }
+
+  .title {
+    color: rgb(231, 231, 231);
+    padding: 0 2rem;
+  }
+
+  .title h1 {
+    text-transform: uppercase;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+  }
+</style>
+</div>
+<script src="scripts/three.js"></script>
+<script type="module" src="scripts/earth.js"></script>
 <script>
   $(document).ready(function () {
     var Container = document.getElementsByClassName("wrapper")
@@ -75,81 +115,81 @@
     dots: true,
     focusOnSelect: true,
   });
-$.ajax({
-  method:'post',
-  url: '/totalPages',
-  success: function(data){
-    totalPages = (parseInt(data['page']))
-    page = 0
-  }
-})
-
-window.addEventListener('load', loadProduct)
-window.addEventListener('scroll', loadProduct)
-
-
-var working = false
-function loadProduct(){
-  if(working == false){
-    working = true
-    $.ajax({
+  $.ajax({
     method: 'post',
-    url: '/getProduct',
-    data: {
-      page: page
-    },
-    success: function(data){
-      products = data['products']
-  for(var a in products){
-    price = products[a]['price']
-    image = products[a]['image']
-    name = products[a]['name']
-    desc = products[a]['description']
-    sku = products[a]['sku']
-    posterURL = products[a]['posterURL']
-    if(posterURL.length == 0){
-      posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
-              height="372px">`
-    }else{
-      posterURL = `<img class="card-img-top product-image" src="/images/`+posterURL+`" alt="Card image cap" width="153px"
-              height="372px">`
+    url: '/totalPages',
+    success: function (data) {
+      totalPages = (parseInt(data['page']))
+      page = 0
     }
-    reviews_given = products[a]['reviews_given']
-    stars = products[a]['stars_given']
-    $('.product-items').append(`  
+  })
+
+  window.addEventListener('load', loadProduct)
+  window.addEventListener('scroll', loadProduct)
+
+
+  var working = false
+  function loadProduct() {
+    if (working == false) {
+      working = true
+      $.ajax({
+        method: 'post',
+        url: '/getProduct',
+        data: {
+          page: page
+        },
+        success: function (data) {
+          products = data['products']
+          for (var a in products) {
+            price = products[a]['price']
+            image = products[a]['image']
+            name = products[a]['name']
+            desc = products[a]['description']
+            sku = products[a]['sku']
+            posterURL = products[a]['posterURL']
+            if (posterURL.length == 0) {
+              posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
+              height="372px">`
+            } else {
+              posterURL = `<img class="card-img-top product-image" src="` + posterURL + `" alt="Card image cap" width="153px"
+              height="372px">`
+            }
+            reviews_given = products[a]['reviews_given']
+            stars = products[a]['stars_given']
+            $('.product-items').append(`  
         <div class="col col-12 col-xs-12 col-md-6 col-lg-4 col-xl-3" id="product_card">
           <div class="card">
-            `+posterURL+`
+            `+ posterURL + `
             <div class="card-button">
-              <button type="button" class="show-item modal-opener" value="`+sku+`" data-bs-toggle="modal"
-                data-bs-target="#myModal_`+sku+`">
+              <button type="button" class="show-item modal-opener" value="`+ sku + `" data-bs-toggle="modal"
+                data-bs-target="#myModal_`+ sku + `">
                 Shop This Product
               </button>
             </div>
-            <div class="modal" id="myModal_`+sku+`">
+            <div class="modal" id="myModal_`+ sku + `">
               <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                   <div class="row">
-                    `+posterURL+`
+                    `+ posterURL + `
                     <div class="container col-12 col-md-6 modal-info">
                       <button type="button" class="btn-close x-button" data-bs-dismiss="modal"></button>
                       <div class="modal-header">
-                        <h6 class="modal-title">`+name+`</h6>
-                        <div class="review" id="review_`+sku+`">
+                        <h6 class="modal-title">`+ name + `</h6>
+                        <div class="review" id="review_`+ sku + `">
                           <span class="review-star bx bx-star"></span>
                           <span class="review-star bx bx-star"></span>
                           <span class="review-star bx bx-star"></span>
                           <span class="review-star bx bx-star"></span>
                           <span class="review-star bx bx-star"></span>
-                          <p class="totalreviews">`+reviews_given+` Review/s</p>
+                          <p class="totalreviews">`+ reviews_given + ` Review/s</p>
                         </div>
                       </div>
                       <div class="modal-body">
-                        <div class="price">$`+price+`</div>
-                        <div class="desc">`+desc+`</div>
+                        <div class="price">$`+ price + `</div>
+                        <div class="desc">`+ desc + `</div>
                       </div>
                       <div class="modal-footer">
-                        <button class="button shop-item-button" value="`+sku+`"
+                        <button class="button shop-item-button" value="`+ sku + `"
                           onclick="addtocartClicked(this)">
                           <span>Add to cart</span>
                           <div class="cart">
@@ -159,9 +199,9 @@ function loadProduct(){
                             </svg>
                           </div>
                         </button>
-                        <button type="button" value="`+sku+`" class="wishlist btn bx bx-bookmark-heart"
+                        <button type="button" value="`+ sku + `" class="wishlist btn bx bx-bookmark-heart"
                           style="font-size: 1.75em;" onclick="wishList(this)"></button>
-                        <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/`+sku+`';">See
+                        <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/`+ sku + `';">See
                           Full Details</div>
                       </div>
                     </div>
@@ -170,22 +210,22 @@ function loadProduct(){
 
               </div>
             </div>
-            {{!-- <input type="hidden" id="stars" value="`+stars+`">
-            <input type="hidden" id="reviews" value="`+reviews_given+`"> --}}
+            {{!-- <input type="hidden" id="stars" value="`+ stars + `">
+            <input type="hidden" id="reviews" value="`+ reviews_given + `"> --}}
           </div>
       </div>`)
+          }
+          if (page < totalPages) {
+            page += 1
+          } else {
+            window.removeEventListener("scroll", loadProduct)
+          }
+          console.log(page)
+          setTimeout(function () {
+            working = false;
+          }, 500)
+        }
+      })
     }
-    if(page< totalPages){
-    page += 1
-    }else{
-      window.removeEventListener("scroll", loadProduct)
-    }
-    console.log(page)
-    setTimeout(function(){
-                    working = false;
-                }, 500)
-    }
-  })
   }
-}
 </script>
