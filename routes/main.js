@@ -26,7 +26,6 @@ router.post('/getProduct', async (req, res) => {
         limit: 5,
         offset: 5*page
     })
-    console.log(page)
     res.send({
         products: products.rows
     })

@@ -85,57 +85,10 @@ function loadProduct(){
           <div class="card">
             `+posterURL+`
             <div class="card-button">
-              <button type="button" class="show-item modal-opener" value="`+sku+`" data-bs-toggle="modal"
-                data-bs-target="#myModal_`+sku+`">
-                Edit this listing
+              <button type="button" class="show-item" value="`+sku+`">
+                <a href="/editListing/`+sku+`" style="text-decoration: none;">Edit this listing</a>
               </button>
             </div>
-            <div class="modal" id="myModal_`+sku+`">
-              <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="row">
-                    `+posterURL+`
-                    <div class="container col-12 col-md-6 modal-info">
-                      <button type="button" class="btn-close x-button" data-bs-dismiss="modal"></button>
-                      <div class="modal-header">
-                        <h6 class="modal-title">`+name+`</h6>
-                        <div class="review" id="review_`+sku+`">
-                          <span class="review-star bx bx-star"></span>
-                          <span class="review-star bx bx-star"></span>
-                          <span class="review-star bx bx-star"></span>
-                          <span class="review-star bx bx-star"></span>
-                          <span class="review-star bx bx-star"></span>
-                          <p class="totalreviews">`+reviews_given+` Review/s</p>
-                        </div>
-                      </div>
-                      <div class="modal-body">
-                        <div class="price">$`+price+`</div>
-                        <div class="desc">`+desc+`</div>
-                      </div>
-                      <div class="modal-footer">
-                        <button class="button shop-item-button" value="`+sku+`"
-                          onclick="addtocartClicked(this)">
-                          <span>Add to cart</span>
-                          <div class="cart">
-                            <svg viewBox="0 0 36 26">
-                              <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
-                              <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
-                            </svg>
-                          </div>
-                        </button>
-                        <button type="button" value="`+sku+`" class="wishlist btn bx bx-bookmark-heart"
-                          style="font-size: 1.75em;" onclick="wishList(this)"></button>
-                        <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/`+sku+`';">See
-                          Full Details</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            {{!-- <input type="hidden" id="stars" value="`+stars+`">
-            <input type="hidden" id="reviews" value="`+reviews_given+`"> --}}
           </div>
       </div>`)
     }

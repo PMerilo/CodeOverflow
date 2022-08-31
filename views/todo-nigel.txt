@@ -1,4 +1,4 @@
-edit listing - 20%
+edit listing - done
 create listing - done (will improve if got time)
 infinite scrolling - done
 delete listing
