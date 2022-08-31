@@ -1,0 +1,93 @@
+<div class="admin-padding">
+  <div class="col py-3" style="width: 60%; margin:0 auto; background:white;box-shadow: 12px 12px 22px grey; border-radius:30px; padding: 40px;">
+    <h1 class="display-4">Create Listing</h1><span id="datetime"></span>
+
+    <form method="POST" action="/createListing">
+      <div class="form-group col py-3">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control">
+
+      </div>
+      <div class="form-group col py-3">
+        <label for="category">Category</label>
+        <select name="category" id="category">
+          <option value="T-Shirts & Tops">T-Shirts & Tops</option>
+          <option value="Jeans & Joggers">Jeans & Joggers</option>
+          <option value="Shorts & Skirts">Shorts & Skirts</option>
+          <option value="Dresses">Dresses</option>
+          <option value="Hoodies">Hoodies</option>
+        </select>
+
+      </div>
+      
+      <div class="form-group col py-3" id="">
+        <label for="price">Price</label>
+        <input type="number" name="price" id="price" class="form-control" required>
+
+      </div>
+      <div class="form-group col py-3">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" cols="30" rows="10" class="form-control" required></textarea>
+
+
+      </div>
+      <div class="form-group col py-3">
+      <div id="drop-area">
+        <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload" accept="image/png,image/jpeg,image/jpg,image/gif,image/jfif" onchange="imagePreview(event);" required/> 
+        <img src="" id="output" width="500px" height="flex">
+      </div>
+      <input type="submit" value="Create Listing" class="blue-btn"/>
+    </form>
+  </div>
+</div>
+
+<style type="text/css">
+#drop-area {
+  border: 1px dotted;
+}
+.blue-btn {
+    width: 10rem;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+.blue-btn:hover,
+.blue-btn:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+  .image-preview {
+    width: 300px;
+    min-height: 100px;
+    border: 1px solid #000;
+    margin-top: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #6c757d;
+  }
+
+  .image-preview__image {
+    display: none;
+    width: 20%;
+  }
+</style>
+
+<script>
+
+  function imagePreview(event) {
+    var reader = new FileReader();
+    reader.onload = function(){
+      var output = document.getElementById('output');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+</script>

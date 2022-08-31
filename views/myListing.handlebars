@@ -1,0 +1,155 @@
+<div class="container ">
+  <div class="row mt-3 product-items">
+    {{!-- product --}}
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var Container = document.getElementsByClassName("wrapper")
+    console.log(Container)
+    for (i = 1; i < 6; i++) {
+      var sku = Container[i].getElementsByClassName('sku')[0].value
+      var ele = Container[i].getElementsByClassName('wishlist')[0]
+      $.ajax({
+        url: "/wishlist",
+        method: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify({ sku: sku, status: "check" }),
+        success: function (res) {
+          if (res.response == 'add' && res.status == "check") {
+            ele.classList.add('bxs-bookmark-heart')
+            console.log("added")
+          } else if (res.response == 'remove' && res.status == "check") {
+            ele.classList.remove('bxs-bookmark-heart')
+            console.log("removed")
+          }
+        }
+      })
+    }
+  })
+
+  document.querySelectorAll('.button').forEach(button => button.addEventListener('click', e => {
+    if (!button.classList.contains('loading')) {
+
+      button.classList.add('loading');
+
+      setTimeout(() => button.classList.remove('loading'), 3700);
+    }
+    e.preventDefault();
+  }));
+
+$.ajax({
+  method:'post',
+  url: '/totalPages',
+  success: function(data){
+    totalPages = (parseInt(data['page']))
+    console.log(totalPages)
+    page = 0
+  }
+})
+
+window.addEventListener('load', loadProduct)
+window.addEventListener('scroll', loadProduct)
+
+var working = false
+function loadProduct(){
+  if(working == false){
+    working = true
+    $.ajax({
+    method: 'post',
+    url: '/getListing',
+    data: {
+      page: page
+    },
+    success: function(data){
+      products = data['products']
+  for(var a in products){
+    price = products[a]['price']
+    image = products[a]['image']
+    name = products[a]['name']
+    desc = products[a]['description']
+    sku = products[a]['sku']
+    posterURL = products[a]['posterURL']
+    if(posterURL.length == 0){
+      posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
+              height="372px">`
+    }else{
+      posterURL = `<img class="card-img-top product-image" src="/images/items/`+posterURL+`" alt="Card image cap" width="153px"
+              height="372px">`
+    }
+    reviews_given = products[a]['reviews_given']
+    stars = products[a]['stars_given']
+    $('.product-items').append(`  
+        <div class="col col-12 col-xs-12 col-md-6 col-lg-4 col-xl-3" id="product_card">
+          <div class="card">
+            `+posterURL+`
+            <div class="card-button">
+              <button type="button" class="show-item modal-opener" value="`+sku+`" data-bs-toggle="modal"
+                data-bs-target="#myModal_`+sku+`">
+                Edit this listing
+              </button>
+            </div>
+            <div class="modal" id="myModal_`+sku+`">
+              <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="row">
+                    `+posterURL+`
+                    <div class="container col-12 col-md-6 modal-info">
+                      <button type="button" class="btn-close x-button" data-bs-dismiss="modal"></button>
+                      <div class="modal-header">
+                        <h6 class="modal-title">`+name+`</h6>
+                        <div class="review" id="review_`+sku+`">
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <span class="review-star bx bx-star"></span>
+                          <p class="totalreviews">`+reviews_given+` Review/s</p>
+                        </div>
+                      </div>
+                      <div class="modal-body">
+                        <div class="price">$`+price+`</div>
+                        <div class="desc">`+desc+`</div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="button shop-item-button" value="`+sku+`"
+                          onclick="addtocartClicked(this)">
+                          <span>Add to cart</span>
+                          <div class="cart">
+                            <svg viewBox="0 0 36 26">
+                              <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
+                              <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
+                            </svg>
+                          </div>
+                        </button>
+                        <button type="button" value="`+sku+`" class="wishlist btn bx bx-bookmark-heart"
+                          style="font-size: 1.75em;" onclick="wishList(this)"></button>
+                        <div class="to-reviews" onclick="location.href='http://localhost:5000/reviews/`+sku+`';">See
+                          Full Details</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            {{!-- <input type="hidden" id="stars" value="`+stars+`">
+            <input type="hidden" id="reviews" value="`+reviews_given+`"> --}}
+          </div>
+      </div>`)
+    }
+    if(page < totalPages){
+        page += 1
+        }else{
+        window.removeEventListener("scroll", loadProduct)
+    }
+    console.log(page)
+    setTimeout(function(){
+                    working = false;
+    }, 500)
+    }
+  })
+  }
+}
+</script>
