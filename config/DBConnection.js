@@ -29,6 +29,10 @@ const setUpDB = (drop) => {
             User.hasMany(Wishlist);
             Wishlist.belongsTo(Product);
 
+            // Product.belongsTo(User)
+            // User.hasMany(Product)
+
+
             mySQLDB.sync({
                 alter: true,
                 force: drop
