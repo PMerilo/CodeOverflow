@@ -94,7 +94,7 @@ function checkoutcheck() {
     var address = document.getElementById('address').value
     var unit_number = document.getElementById('unit_number').value
     var postalcode = document.getElementById('postalcode').value
-    fetch("http://localhost:5000/checkout", {
+    fetch("https://code-overdose.herokuapp.com/checkout", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

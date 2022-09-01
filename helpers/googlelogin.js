@@ -11,7 +11,7 @@ function googlelogin() {
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:5000/login-google/callback"
+        callbackURL: "https://code-overdose.herokuapp.com/login-google/callback"
       },
         async function(accessToken, refreshToken, profile, done) {
             const [user, created] = await User.findOrCreate({

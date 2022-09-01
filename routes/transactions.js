@@ -107,8 +107,8 @@ router.post('/payment', ensureAuthenticated, async (req, res) => {
                 chatId: `${req.body.id}`,
                 orderOwnerName: `${req.body.fname}`,
             },
-            success_url: `http://localhost:5000${req.body.curl}`,
-            cancel_url: `http://localhost:5000${req.body.curl}`,
+            success_url: `https://code-overdose.herokuapp.com${req.body.curl}`,
+            cancel_url: `https://code-overdose.herokuapp.com${req.body.curl}`,
         })
         res.json({ url: session.url })
     } catch (e) {
