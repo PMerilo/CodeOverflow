@@ -1,8 +1,11 @@
 <link rel="stylesheet" href="styles/homepage.css">
 <link rel="stylesheet" href="styles/product.css">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 {{!-- <div class="slider-nav">
   <div class="slide1">
     <img src="images/banner.jpg" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
@@ -22,14 +25,44 @@
 </div> --}}
 <div class="landing">
   <div class="title-container">
-    <div class="title">
+    <div class="title wow fadeInLeft" data-wow-delay="1s">
       <h3>"That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human
         being
         who ever was, lived out their lives."</h3>
-      <h4>~ Carl Sagon</h4>
+      <h4 class="wow fadeInRight" data-wow-delay="1.2s">~ Carl Sagon</h4>
     </div>
   </div>
-  <canvas id="c"></canvas>
+  <canvas id="c" class="wow fadeInRight" data-wow-delay="0.2s"></canvas>
+  <h1 class="cc wow fadeInDown" data-wow-delay="0.2s">CLIMATE CHANGE</h1>
+  {{!-- <iframe width="560" height="315"
+    src="https://www.youtube-nocookie.com/embed/gXXOkhoki8s?controls=0&amp;start=17&end=27&playlist=gXXOkhoki8s&loop=1"
+    title="YouTube video player" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe> --}}
+  <div class="txt row">
+    <div class="col-12 col-lg-6">
+      <img class="cpc wow fadeInLeft"
+        src="https://cdn.discordapp.com/attachments/1001105526144368670/1014191354848489562/Xa3B5y5HdddW6dGC5Uj5Tb.gif"
+        width="560" height="315" data-wow-delay="0.2s">
+    </div>
+    <div class="col-12 col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
+        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
+        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+    </div>
+  </div>
+  <div class="txt row">
+    <div class="col-12 col-lg-6  wow fadeInLeft" data-wow-delay="0.2s">
+      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
+        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
+        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+    </div>
+    <div class="col-12 col-lg-6 ">
+      <img class="cpc wow fadeInRight"
+        src="images/cc.jfif"
+         height="350" data-wow-delay="0.2s">
+    </div>
+  </div>
 </div>
   <select name="sort" id="sort" onchange="submitSorting(this)">
           <option disabled="disabled" id='default-option'selected>sort by</option>
@@ -44,8 +77,32 @@
   </div>
 </div>
 <style>
-  .landing {
+  body {
     background-color: black;
+  }
+  img {
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }
+
+  p {
+    padding-top: 20px;
+    padding-left: 20px;
+    font-size: 1.3em;
+    justify-content: center;
+    color: white
+  }
+
+  .cc {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    color: white
+  }
+
+  .cpc {
+    padding: 20px;
   }
 
   .title-container {
@@ -71,9 +128,11 @@
 </style>
 </div>
 <script src="scripts/three.js"></script>
+<script src="scripts/cart.js"></script>
 <script type="module" src="scripts/earth.js"></script>
 <script>
   $(document).ready(function () {
+    new WOW().init();
     var Container = document.getElementsByClassName("wrapper")
     console.log(Container)
     for (i = 1; i < 6; i++) {
@@ -97,7 +156,8 @@
     }
   })
 
-  document.querySelectorAll('.button').forEach(button => button.addEventListener('click', e => {
+  document.querySelectorAll('.cbutton').forEach(button => button.addEventListener('click', e => {
+    console.log("hi")
     if (!button.classList.contains('loading')) {
 
       button.classList.add('loading');
@@ -222,7 +282,7 @@ function loadProduct(){
                         <div class="desc">`+ desc + `</div>
                       </div>
                       <div class="modal-footer">
-                        <button class="button shop-item-button" value="`+ sku + `"
+                        <button class="button cbutton shop-item-button" value="`+ sku + `"
                           onclick="addtocartClicked(this)">
                           <span>Add to cart</span>
                           <div class="cart">

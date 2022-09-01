@@ -130,6 +130,7 @@ router.post('/getListing', async (req, res) => {
 })
 
 router.get('/myListing', (req, res) => {
+    console.log(req.user.id)
     res.render('myListing')
 })
 
