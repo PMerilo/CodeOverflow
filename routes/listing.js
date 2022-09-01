@@ -47,8 +47,8 @@ router.post('/getProduct', async (req, res) => {
         },
         order: sortby,
         raw: true,
-        limit: 5,
-        offset: 5*page,
+        limit: 6,
+        offset: 6*page,
     })
     res.send({
         products: products.rows
@@ -75,14 +75,16 @@ router.get('/viewProduct/:id', async (req, res) => {
             }]
         });
 
-    console.log(product)
     if(!req.isAuthenticated()){
         id =""
     }else{
         var id =req.user.id
     }
-
-    const wishlist = await Wishlist.findOne({where: {productSku: req.params.id, userId: req.user.id}})
+    if(req.isAuthenticated()){
+        wishlist = await Wishlist.findOne({where: {productSku: req.params.id, userId: req.user.id}})
+    }else{
+        wishlist =""
+    }
     res.render('viewProduct', {product: product, wishlist: wishlist, id: id});
 
 })
@@ -96,7 +98,6 @@ router.get('/editListing/:id', async (req, res) => {
 
 router.post('/editListing/:id', async (req, res) => {
     let { posterURL, name, description, price, category} = req.body;
-    console.log(name)
     var product = await Product.findByPk(req.params.id, {raw: true});
     if(posterURL == ""){
         posterURL = product.posterURL

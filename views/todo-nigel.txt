@@ -9,7 +9,7 @@ sorting by price - done (might still be buggy)
 NOTES:
 
 by thrifting, we are able to save about 500 pounds of carbon emission every year.
-It reduces our water, reduce our water, waste and carbon footprint by more than 80%
+It reduces our water, waste and carbon footprint by more than 80%
 
 
 recent commit:
