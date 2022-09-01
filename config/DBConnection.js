@@ -29,8 +29,8 @@ const setUpDB = (drop) => {
             User.hasMany(Wishlist);
             Wishlist.belongsTo(Product);
 
-            // Product.belongsTo(User)
-            // User.hasMany(Product)
+            Product.belongsTo(User, {foreignKey: 'OwnerID'})
+            User.hasMany(Product, {foreignKey: 'OwnerID'})
 
 
             mySQLDB.sync({

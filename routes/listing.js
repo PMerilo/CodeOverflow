@@ -11,6 +11,7 @@ const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
 const sequelize = require('sequelize');
+const { authenticate } = require('passport');
 const op = sequelize.Op
 
 router.post('/getProduct', async (req, res) => {
@@ -65,8 +66,19 @@ router.get('/viewProduct/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id,
          {
             raw: true,
+            include:[
+                {
+                model: User,
+                required:false,
+            }]
         });
-    res.render('viewProduct', {product: product});
+    console.log(product)
+    if(!req.isAuthenticated()){
+        id =""
+    }else{
+        var id =req.user.id
+    }
+    res.render('viewProduct', {product: product, id: id});
 })
 
 router.use(ensureAuthenticated)

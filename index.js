@@ -135,6 +135,11 @@ app.engine(
 			formatDate(date, targetFormat) {
 				return moment(date).format(targetFormat);
 			},
+			checkOwner(userId, OwnerId){
+				if(userId == OwnerId){
+					return true;
+				}return false;
+			}
 		},
 	})
 );
