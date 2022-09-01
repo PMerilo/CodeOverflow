@@ -49,7 +49,6 @@ app.set('io', io)
 
 // Library to use MySQL to store session objects 
 const MySQLStore = require('express-mysql-session');
-console.log(process.env.DB_HOST);
 var options = {
 	host: process.env.DB_HOST,
 	port: process.env.DB_PORT,
