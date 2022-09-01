@@ -136,17 +136,17 @@ router.get('/addtowishlist/:id', async (req, res) => {
                 await Wishlist.create({userId: req.user.id,productSku: req.params.id})
                 .then((product) => {
                     flashMessage(res,'success', 'Listing added to wishlist');
-                    res.redirect('/'); //change to listing page
+                    res.redirect(`/viewProduct/${req.params.id}`); //change to listing page
                 })
                 .catch(err => console.log(err))
             } else {
                 flashMessage(res,'error', 'Listing already in wishlist');
-                res.redirect('/'); //change to listing page
+                res.redirect(`/viewProduct/${req.params.id}`); //change to listing page
             }
             
         } else {
             flashMessage(res, 'error', 'No listing found');
-            res.redirect('/'); //change to listing page
+            res.redirect(`/`); //change to listing page
         }
     } else {
         flashMessage(res, 'error', 'Please log in to add listing to wishlist');
@@ -164,12 +164,12 @@ router.get('/deletewishlist/:id', async (req, res) => {
                 await Wishlist.destroy({where: {productSku: req.params.id}})
                 .then((product) => {
                     flashMessage(res,'success', 'Listing deleted from wishlist');
-                    res.redirect('/'); //change to listing page
+                    res.redirect(`/viewProduct/${req.params.id}`); //change to listing page
                 })
                 .catch(err => console.log(err))
             } else {
                 flashMessage(res,'error', 'Listing is not in wishlist');
-                res.redirect('/'); //change to listing page
+                res.redirect(`/viewProduct/${req.params.id}`); //change to listing page
             }
             
         } else {
@@ -185,7 +185,7 @@ router.get('/deletewishlist/:id', async (req, res) => {
 
 router.get('/wishlist', ensureAuthenticated, async (req, res) => {
     const wishlist = await Wishlist.findAndCountAll(
-        {where: {id: req.user.id},
+        {where: {userId: req.user.id},
         include: {model: Product,
         required: true}, 
     })
@@ -194,4 +194,26 @@ router.get('/wishlist', ensureAuthenticated, async (req, res) => {
     // console.log(wishlist.rows[0])
     res.render("wishlist", metadata)
 })
+
+router.post('/getWishlist', async (req, res) => {
+    var page = req.body.page
+    if(page == undefined){
+        page = 0
+    }else{
+        page = parseInt(page)
+    }
+    var wishlist  = await Wishlist.findAndCountAll({
+        raw: true,
+        limit: 5,
+        offset: 5*page,
+        where: {userId: req.user.id},
+        include: {model: Product,
+        required: true},
+    })
+    res.send({
+        wishlist: wishlist.rows
+    })
+})
+
+
 module.exports = router

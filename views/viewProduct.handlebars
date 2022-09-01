@@ -1,19 +1,23 @@
 
-{{#product}}
+{{!-- {{#product}} --}}
 <div class="container">
     <div class="row align-items-start">
         <div class="image col-md-12 border bg-secondary">
             <div style="margin-top: 5px;">
                 <button class="like-box" style="float: right; padding-right: 10px; border: none;">
                     <div style="float:right;padding-top:5px;padding-bottom:5px">Likes</div>
-                    <i class='bx bx-heart'  style="float:right; padding:5px;"></i> 
+                    {{#unless wishlist}}
+                        <a href="/user/addtowishlist/{{product.sku}}"><i class='bx bx-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{else}}
+                        <a href="/user/deletewishlist/{{product.sku}}"><i class='bx bxs-bookmark-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{/unless}}
                 </button>
             </div>
-            <center><img class='img-fluid align-items-center' src="/images/items/{{posterURL}}"></center>
+            <center><img class='img-fluid align-items-center' src="/images/items/{{product.posterURL}}"></center>
         </div>
     </div>
     <div class="item-right col-md-3 text-center" style="float: right">
-        <h3>{{Owner}}</h3>
+        <h3>{{product.Owner}}</h3>
         <button class="modal-button buy"><span>buy</span></button>
         {{!-- <button class="modal-button other fav"><span>Add To Favourite</span></button> --}}
         <br>
@@ -21,19 +25,19 @@
     </div>
     <div class="row align-items-center">
         <div class="col-md-12">
-            <h3 style="font-weight: normal;">{{name}}</h3>
-            <h3>${{price}}</h3>
+            <h3 style="font-weight: normal;">{{product.name}}</h3>
+            <h3>${{product.price}}</h3>
             <br>
             <hr class="col-md-12">
             <h4>Description</h4>
             <p id="uploadedAt"></p>
-            <input type="hidden" value="{{createdAt}}" id="created">
-            <p>{{description}}</p>
+            <input type="hidden" value="{{product.createdAt}}" id="created">
+            <p>{{product.description}}</p>
         </div>
 
     </div>
 </div>
-{{/product}}
+{{!-- {{/product}} --}}
 
 <style>
     .like-box{
