@@ -19,8 +19,8 @@ const setUpDB = (drop) => {
             Chat.belongsTo(User, {as: "buyer", foreignKey: 'buyerId'} )
             User.hasMany(Chat, {as: "buyer", foreignKey: 'buyerId'} )
 
-            Chat.belongsTo(Product, {as: "product", foreignKey: 'productId'} )
-            Product.hasMany(Chat, {as: "product", foreignKey: 'productId'} )
+            Chat.belongsTo(Product, {foreignKey: 'productId'} )
+            Product.hasMany(Chat, {foreignKey: 'productId'} )
 
             Product.belongsToMany(Cart, { through: CartProduct })
             Cart.belongsToMany(Product, { through: CartProduct })
