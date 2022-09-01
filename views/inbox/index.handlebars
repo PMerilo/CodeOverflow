@@ -15,7 +15,7 @@
             <div class="border-bottom">
                 <div class="d-flex px-4 py-2 align-items-center">
                     <div class="p-2">
-                        <img class="rounded-circle img-fluid" width="40" src="/images/avatars/avatar1.jpg" alt="">
+                        <img class="img-fluid" width="40" src="/images/user_img.png" alt="">
                     </div>
                     <div class="px-5 fs-4 chat-name">
                         {{currentchat.name}}
@@ -35,7 +35,7 @@
             {{#each chats}}
             <a class="chat text-black" href='/inbox/{{id}}'>
                 <div class="hstack gap-4 p-3 position-relative">
-                    <img class="rounded-circle img-fluid" width="60" src="/images/avatars/avatar1.jpg" alt="">
+                    <img class="img-fluid" width="60" src="/images/user_img.png" alt="">
                     <div class="d-flex flex-column justify-content-center flex-grow-1">
                         <span>{{#equals buyerId ../user.id}}{{product.Owner}}{{else}}{{buyer.name}}{{/equals}}</span>
                         <span class="text-truncate" style="max-width: 80%;">
@@ -71,22 +71,6 @@
                 </div>
             </div>
             <div class="flex-grow-1 overflow-auto" id="chat-panel">
-                {{!-- {{#each currentchat.msgs}}
-                {{#equals userId ../user.id}}
-                <div class="d-flex justify-content-end">
-                    <div class="chat-bubble chat-bubble--right text-break" style="max-width: 50%;">
-                        {{content}}
-                    </div>
-                </div>
-                {{else}}
-                <div class="d-flex">
-                    <div class="chat-bubble chat-bubble--left text-break" style="max-width: 50%;">
-                        {{content}}
-                    </div>
-                </div>
-                {{/equals}}
-                {{/each}} --}}
-
             </div>
             <div class="message-box border-top">
                 <div id="chat-box" style="display: none;">
@@ -330,6 +314,7 @@
                 if (window.location.pathname.split('/')[2] == 'new') {
                     socket.emit('chat:join', data.chatId)
                     window.history.pushState('page2', '', `/inbox/${data.chatId}`);
+                    data.new = true
                 }
                 socket.emit('message:sent', data);
             })
