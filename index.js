@@ -13,6 +13,7 @@ const DBConnection = require('./config/DBConnection');
 
 //Routes
 const main = require('./routes/main')
+const transactions = require('./routes/transactions')
 const listing = require('./routes/listing')
 const api = require('./routes/api')
 const inbox = require('./routes/inbox')
@@ -34,6 +35,10 @@ const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
+    socket.userid = socket.handshake.auth.id
+	socket.join(`User ${socket.userid}`)
+    // console.log(socket.rooms) 
+
     messagingHandler(io, socket)
     console.log(`${socket.id} has connected`);
 }
@@ -139,7 +144,11 @@ app.engine(
 				if(userId == OwnerId){
 					return true;
 				}return false;
-			}
+			},
+			add(v1, v2) {
+				return parseInt(v1) + parseInt(v2);
+			},
+
 		},
 	})
 );
@@ -159,6 +168,7 @@ app.all("/*", (req, res, next) => {
 //Set layout for all routes
 
 app.use("/", main)
+app.use("/", transactions)
 app.use("/", listing)
 app.use("/inbox", ensureAuthenticated, inbox)
 app.use("/api", api)

@@ -4,7 +4,7 @@ const flashMessage = require('../helpers/messenger');
 
 const Product =  require('../models/Product')
 const User = require('../models/User');
-
+const { Op } = require('sequelize')
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
@@ -130,6 +130,7 @@ router.post('/getListing', async (req, res) => {
 })
 
 router.get('/myListing', (req, res) => {
+    console.log(req.user.id)
     res.render('myListing')
 })
 
@@ -143,7 +144,8 @@ router.post('/createListing', (req, res) => {
         posterURL:posterUpload,
         quantity: 1,
         OwnerID: req.user.id,
-        Owner: req.user.name
+        Owner: req.user.name,
+        sold:0
     });
     res.redirect('/myListing');
 });
@@ -173,6 +175,29 @@ router.post('uploadsubmit', (req,res)=>{
 	if (!fs.existsSync('./public/images/items/')){
 		fs.mkdirSync('./public/images/items/', {recursive: true})
 	}
+})
+
+router.get('/leaderboard', async (req, res) => {
+    const first = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+    }).catch(err => console.log(err))
+    const second = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+        offset: 1
+    }).catch(err => console.log(err))
+    const third = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+        offset: 2
+    }).catch(err => console.log(err))
+    const rest = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 7,
+        offset: 3
+    }).catch(err => console.log(err))
+    res.render('leaderboard', {first: first, second: second, third: third, rest: rest})
 })
 
 router.get('/currentUser', ensureAuthenticated, (req, res, next) => {

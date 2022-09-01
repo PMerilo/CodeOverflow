@@ -1,11 +1,14 @@
-
 <div class="container">
     <div class="row align-items-start">
         <div class="image col-md-12 border bg-secondary">
             <div style="margin-top: 5px;">
                 <button class="like-box" style="float: right; padding-right: 10px; border: none;">
                     <div style="float:right;padding-top:5px;padding-bottom:5px">Likes</div>
-                    <i class='bx bx-heart'  style="float:right; padding:5px;"></i> 
+                    {{#unless wishlist}}
+                        <a href="/user/addtowishlist/{{product.sku}}"><i class='bx bx-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{else}}
+                        <a href="/user/deletewishlist/{{product.sku}}"><i class='bx bxs-bookmark-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{/unless}}
                 </button>
             </div>
             <center><img class='img-fluid align-items-center' src="/images/items/{{product.posterURL}}"></center>

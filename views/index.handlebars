@@ -1,8 +1,11 @@
 <link rel="stylesheet" href="styles/homepage.css">
 <link rel="stylesheet" href="styles/product.css">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
 {{!-- <div class="slider-nav">
   <div class="slide1">
     <img src="images/banner.jpg" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
@@ -22,30 +25,77 @@
 </div> --}}
 <div class="landing">
   <div class="title-container">
-    <div class="title">
+    <div class="title wow fadeInLeft" data-wow-delay="1s">
       <h3>"That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human
         being
         who ever was, lived out their lives."</h3>
-      <h4>~ Carl Sagon</h4>
+      <h4 class="wow fadeInRight" data-wow-delay="1.2s">~ Carl Sagon</h4>
     </div>
   </div>
-  <canvas id="c"></canvas>
+  <canvas id="c" class="wow fadeInRight" data-wow-delay="0.2s"></canvas>
+  <h1 class="cc wow fadeInDown" data-wow-delay="0.2s">CLIMATE CHANGE</h1>
+  {{!-- <iframe width="560" height="315"
+    src="https://www.youtube-nocookie.com/embed/gXXOkhoki8s?controls=0&amp;start=17&end=27&playlist=gXXOkhoki8s&loop=1"
+    title="YouTube video player" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen></iframe> --}}
+  <div class="txt row">
+    <div class="col-12 col-lg-6">
+      <img class="cpc wow fadeInLeft"
+        src="https://cdn.discordapp.com/attachments/1001105526144368670/1014191354848489562/Xa3B5y5HdddW6dGC5Uj5Tb.gif"
+        width="560" height="315" data-wow-delay="0.2s">
+    </div>
+    <div class="col-12 col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
+        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
+        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+    </div>
+  </div>
+  <div class="txt row">
+    <div class="col-12 col-lg-6  wow fadeInLeft" data-wow-delay="0.2s">
+      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
+        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
+        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+    </div>
+    <div class="col-12 col-lg-6 ">
+      <img class="cpc wow fadeInRight"
+        src="images/cc.jfif"
+         height="350" data-wow-delay="0.2s">
+    </div>
+  </div>
 </div>
-  <select name="sort" id="sort" onchange="submitSorting(this)">
-          <option disabled="disabled" id='default-option'selected>sort by</option>
-          <option value="Highest To Lowest" id="Highest-To-Lowest">Highest To Lowest</option>
-          <option value="Lowest To Highest" id="Lowest-To-Highest">Lowest To Highest</option>
-          <option value="Most Recent" id="Most-Recent">Most Recent</option>
-          <option value="Oldest to Newest" id="Oldest-to-Newest">Oldest to Newest</option>
-        </select>
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
   </div>
 </div>
 <style>
-  .landing {
+  body {
     background-color: black;
+  }
+  img {
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }
+
+  p {
+    padding-top: 20px;
+    padding-left: 20px;
+    font-size: 1.3em;
+    justify-content: center;
+    color: white
+  }
+
+  .cc {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    color: white
+  }
+
+  .cpc {
+    padding: 20px;
   }
 
   .title-container {
@@ -71,9 +121,11 @@
 </style>
 </div>
 <script src="scripts/three.js"></script>
+<script src="scripts/cart.js"></script>
 <script type="module" src="scripts/earth.js"></script>
 <script>
   $(document).ready(function () {
+    new WOW().init();
     var Container = document.getElementsByClassName("wrapper")
     console.log(Container)
     for (i = 1; i < 6; i++) {
@@ -97,7 +149,8 @@
     }
   })
 
-  document.querySelectorAll('.button').forEach(button => button.addEventListener('click', e => {
+  document.querySelectorAll('.cbutton').forEach(button => button.addEventListener('click', e => {
+    console.log("hi")
     if (!button.classList.contains('loading')) {
 
       button.classList.add('loading');
@@ -130,61 +183,34 @@
     }
   })
 
-window.addEventListener('load', loadProduct)
-window.addEventListener('load', setSort)
-window.addEventListener('scroll', loadProduct)
+  window.addEventListener('load', loadProduct)
+  window.addEventListener('scroll', loadProduct)
 
 
-function submitSorting(element){
-  if(category == "" || category == null){
-    window.location.replace('/?sortby='+element.value)
-  }else{
-    window.location.replace('/?category='+category+'&sortby='+element.value)
-  }
-}
-
-function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-var category = getParameterByName('category')
-var sortby = getParameterByName('sortby')
-function setSort(){
-  sortby = sortby.split(' ').join('-')
-  document.getElementById('default-option').removeAttribute('selected')
-  document.getElementById(sortby).setAttribute('selected', 'true')
-}
-
-var working = false
-function loadProduct(){
-  if(working == false){
-    working = true
-    $.ajax({
-    method: 'post',
-    url: '/getProduct?category='+category,
-    data: {
-      page: page,
-      sortby: sortby
-    },
-    success: function(data){
-      products = data['products']
-  for(var a in products){
-    price = products[a]['price']
-    image = products[a]['image']
-    name = products[a]['name']
-    desc = products[a]['description']
-    sku = products[a]['sku']
-    posterURL = products[a]['posterURL']
-    if(posterURL.length == 0){
-      posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
+  var working = false
+  function loadProduct() {
+    if (working == false) {
+      working = true
+      $.ajax({
+        method: 'post',
+        url: '/getProduct',
+        data: {
+          page: page
+        },
+        success: function (data) {
+          products = data['products']
+          for (var a in products) {
+            price = products[a]['price']
+            image = products[a]['image']
+            name = products[a]['name']
+            desc = products[a]['description']
+            sku = products[a]['sku']
+            posterURL = products[a]['posterURL']
+            if (posterURL.length == 0) {
+              posterURL = `<img class="card-img-top product-image" src="/images/no-image.jpg" alt="Card image cap" width="153px"
               height="372px">`
-    }else{
-      posterURL = `<img class="card-img-top product-image" src="/images/items/`+posterURL+`" alt="Card image cap" width="153px"
+            } else {
+              posterURL = `<img class="card-img-top product-image" src="` + posterURL + `" alt="Card image cap" width="153px"
               height="372px">`
             }
             reviews_given = products[a]['reviews_given']
@@ -222,7 +248,7 @@ function loadProduct(){
                         <div class="desc">`+ desc + `</div>
                       </div>
                       <div class="modal-footer">
-                        <button class="button shop-item-button" value="`+ sku + `"
+                        <button class="button cbutton shop-item-button" value="`+ sku + `"
                           onclick="addtocartClicked(this)">
                           <span>Add to cart</span>
                           <div class="cart">
@@ -260,15 +286,5 @@ function loadProduct(){
         }
       })
     }
-    if(page< totalPages){
-    page += 1
-    }else{
-      window.removeEventListener("scroll", loadProduct)
-    }
-    setTimeout(function(){
-                    working = false;
-                }, 500)
-    }
-  })
   }
 </script>

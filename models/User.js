@@ -39,8 +39,26 @@ User.init(
             allowNull: false,
             defaultValue: false,
         },
-        tfa: {
+        about: {
+            type: sequelize.DataTypes.TEXT('long'),
+        },
+        cf: {
+            type: sequelize.DataTypes.FLOAT,
+            defaultValue: 0,
+        },
+        total_balance: {
+            type: sequelize.DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        withdrawn_amount: {
+            type: sequelize.DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        bankAccount: {
             type: sequelize.DataTypes.STRING,
+            allowNull: true,
         },
     },
     {

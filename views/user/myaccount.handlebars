@@ -18,7 +18,8 @@
     color: rgb(99, 189, 184);
 
   }
-  .btn:hover > a{
+
+  .btn:hover>a {
     color: rgb(99, 189, 184) !important;
   }
 </style>
@@ -53,6 +54,10 @@
             <p class="col-7">{{user.gender}}</p>
           </div>
           <div class="row">
+            <p class="col-5">About: </p>
+            <p class="col-7">{{user.about}}</p>
+          </div>
+          <div class="row">
             <p class="col-5">Phone Number: </p>
             {{!-- {{#if (phonenumbercheck user.phoneNumber)}} --}}
             {{#if (user.phoneNumber)}}
@@ -66,35 +71,43 @@
             <a class="col-7" href="/user/changePassword">Change Password</a>
           </div>
           <div class="row">
+            <div class="col-12 col-lg-6">
 
-            <form action="" style="margin-top: 10px;" method="POST">
-              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{this.id}}">
-                Delete Account
-              </button>
+              <form action="" style="margin-top: 10px;" method="POST">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                  data-bs-target="#myModal_{{this.id}}">
+                  Delete Account
+                </button>
 
-              <div class="modal" id="myModal_{{this.id}}">
-                <div class="modal-dialog">
-                  <div class="modal-content">
+                <div class="modal" id="myModal_{{this.id}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                      <h4 class="modal-title">Delete Account Confirmation</h4>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete Account Confirmation</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <div class="modal-body">
+                        Are you sure you want to delete your account? You will no longer have an account with us...
+                      </div>
+
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
                     </div>
-
-                    <div class="modal-body">
-                      Are you sure you want to delete your account? You will no longer have an account with us...
-                    </div>
-
-                    <div class="modal-footer">
-                      <input type="submit" value="Delete" class="btn btn-danger">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-
                   </div>
                 </div>
-              </div>
-            </form>
-
+              </form>
+            </div>
+            <div class="col-12 col-lg-6">
+              <button type="button" class="btn btn-success" style="float:right;" data-bs-toggle="modal"
+                data-bs-target="#mywithdrawModal_{{this.id}}">
+                Withdraw
+              </button>
+            </div>
 
           </div>
 
@@ -106,5 +119,4 @@
       </div>
     </div>
   </div>
-</div>
 </div>

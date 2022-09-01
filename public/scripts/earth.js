@@ -15,7 +15,7 @@ function main()
     scene.add(camera);
 
     renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true,});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth -10, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
 
     renderer.autoClear = false;
