@@ -167,6 +167,8 @@
                     $('.offer-status').text(data.status + " of $" + data.offer)
                     $('.offer-btn:contains("Mark as sold")').show()
                 }
+            } else if (data.status == 'Payment Made') {
+                $('.offer-status').text("Payment of $" + data.offer + " was made!")
             }
         }
 
