@@ -90,9 +90,24 @@ function loadProduct() {
                                         </div>
                                         <a href="/viewOneListing/`+id+`" class="product-name">`+name+`</a>
                                         `+price_info
+                      if(sold == 1){
+                      overlay = `<div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div><div class="overlay">
+                                    <div class="content">
+                                      <img src="/images/hanger-line.png" width="75px" height="75px">
+                                      <p>Sold Out</p>
+                                      <div class="btttn">
+                                        <button type="button" value="{{ this.product.sku }}" class="wishlist dark-btn"
+                                          onclick="wishLists(this)">Delete</button>
+                                      </div>
+                                    </div>
+                                  </div>`
+                    }else{
+                      overlay = `<div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div>`
+                    }
+
                       image_id = `<div class='product-img'><a href="/viewOneListing/`+id+`">`+image+`</a></div>`                                                                                                                                                                                                   
-                      $(".product-items").append(`<div class='product'><div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div>`+productInfo+`</div>`)
-                      /*$('body').append(modal)*/
+                      $(".product-items").append(`<div class='product'>`+productInfo+`</div>`)
+                      /$('body').append(modal)/
 
                 }
                 page += 1
@@ -106,6 +121,25 @@ function loadProduct() {
 }
 </script>
 <style>
+.overlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  height:100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+.img .overlay {
+  opacity : 1;
+}
   .cleared{
   color: grey
 }
