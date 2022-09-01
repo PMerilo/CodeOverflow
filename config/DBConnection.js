@@ -3,8 +3,6 @@ const Product = require('../models/Product');
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 const Msg = require('../models/Msg');
-const Cart = require('../models/Cart');
-const CartProduct = require('../models/CartProduct');
 const Wishlist = require('../models/Wishlist');
 
 // If drop is true, all existing tables are dropped and recreated
@@ -19,14 +17,8 @@ const setUpDB = (drop) => {
             Chat.belongsTo(User, {as: "buyer", foreignKey: 'buyerId'} )
             User.hasMany(Chat, {as: "buyer", foreignKey: 'buyerId'} )
 
-            Chat.belongsTo(Product, {as: "product", foreignKey: 'productId'} )
-            Product.hasMany(Chat, {as: "product", foreignKey: 'productId'} )
-
-            Product.belongsToMany(Cart, { through: CartProduct })
-            Cart.belongsToMany(Product, { through: CartProduct })
-
-            User.hasOne(Cart)
-            Cart.belongsTo(User)
+            Chat.belongsTo(Product, {foreignKey: 'productId'} )
+            Product.hasMany(Chat, {foreignKey: 'productId'} )
 
             Msg.belongsTo(Chat)
             Chat.hasMany(Msg)
@@ -38,8 +30,8 @@ const setUpDB = (drop) => {
             User.hasMany(Wishlist);
             Wishlist.belongsTo(Product);
 
-            // Product.belongsTo(User)
-            // User.hasMany(Product)
+            Product.belongsTo(User, {foreignKey: 'OwnerID'})
+            User.hasMany(Product, {foreignKey: 'OwnerID'})
 
 
             mySQLDB.sync({

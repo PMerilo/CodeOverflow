@@ -17,7 +17,10 @@ Product.init({
         sold: {type: sequelize.INTEGER},
         sales: {type: sequelize.INTEGER},
         Owner:{type:sequelize.STRING},
-        OwnerID:{type: sequelize.INTEGER},
+        // OwnerID:{type: sequelize.INTEGER, references:{
+        //     model: 'user',
+        //     key: 'id'
+        // } },
         posterURL: { type: sequelize.STRING }, 
         stars_given: { type: sequelize.INTEGER},
         reviews_given: { type: sequelize.INTEGER},

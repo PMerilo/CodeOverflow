@@ -35,6 +35,10 @@ const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
+    socket.userid = socket.handshake.auth.id
+	socket.join(`User ${socket.userid}`)
+    // console.log(socket.rooms) 
+
     messagingHandler(io, socket)
     console.log(`${socket.id} has connected`);
 }
@@ -136,9 +140,15 @@ app.engine(
 			formatDate(date, targetFormat) {
 				return moment(date).format(targetFormat);
 			},
+			checkOwner(userId, OwnerId){
+				if(userId == OwnerId){
+					return true;
+				}return false;
+			},
 			add(v1, v2) {
 				return parseInt(v1) + parseInt(v2);
 			},
+
 		},
 	})
 );

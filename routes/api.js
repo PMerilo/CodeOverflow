@@ -16,7 +16,7 @@ router.get('/product/:productId', async (req, res) => {
 router.get('/chat/:chatId', async (req, res) => {
     let chat = await Chat.findByPk(req.params.chatId, {
         include: [
-            Msg, 'product', 'buyer'
+            Msg, Product, 'buyer'
         ]
     })
     if (chat === null) {
@@ -34,7 +34,7 @@ router.get('/user/chats', ensureAuthenticated, async (req, res) => {
             }
         },
         include: [
-            Msg, 'product', 'buyer'
+            Msg, Product, 'buyer'
         ]
     })
     if (chats === null) {

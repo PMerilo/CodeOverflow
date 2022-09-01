@@ -11,6 +11,7 @@ const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
 const sequelize = require('sequelize');
+const { authenticate } = require('passport');
 const Wishlist = require('../models/Wishlist');
 const op = sequelize.Op
 
@@ -41,7 +42,8 @@ router.post('/getProduct', async (req, res) => {
             category: 
             {
                 [op.like]:'%'+category+'%'
-            }
+            },
+            sold: { [op.ne]:  1 }
         },
         order: sortby,
         raw: true,
@@ -66,10 +68,23 @@ router.get('/viewProduct/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id,
          {
             raw: true,
+            include:[
+                {
+                model: User,
+                required:false,
+            }]
         });
 
+    console.log(product)
+    if(!req.isAuthenticated()){
+        id =""
+    }else{
+        var id =req.user.id
+    }
+
     const wishlist = await Wishlist.findOne({where: {productSku: req.params.id, userId: req.user.id}})
-    res.render('viewProduct', {product: product, wishlist: wishlist});
+    res.render('viewProduct', {product: product, wishlist: wishlist, id: id});
+
 })
 
 router.use(ensureAuthenticated)
