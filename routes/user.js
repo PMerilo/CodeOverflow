@@ -13,7 +13,23 @@ router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
     user = await User.findByPk(req.params.id)
     const belong = req.params.id == req.user.id
     if (user) {
-        res.render("user/profile", {user, belong})
+        const listings = await Product.findAndCountAll(
+            {where:{
+                OwnerID: req.params.id
+            },
+            order: [['createdAt', "DESC"]],
+            limit: 2
+        }).catch(err => console.log(err))
+
+        const listings2 = await Product.findAndCountAll(
+            {where:{
+                OwnerID: req.params.id
+            },
+            order: [['createdAt', "DESC"]],
+            limit: 2,
+            offset: 2
+        }).catch(err => console.log(err))
+        res.render("user/profile", {user, belong, listings: listings.rows, listings2: listings2.rows, l1: listings.count,l2: listings2.count})
     } else {
         flashMessage(res, 'error', 'No profile found')
         res.redirect('/')
@@ -38,7 +54,7 @@ router.get('/editAccount', ensureAuthenticated, async (req, res) => {
 })
 
 router.post('/editAccount', ensureAuthenticated, async (req, res) => {
-    let {pfpURL, name, email1, phoneNumber, gender} = req.body
+    let {pfpURL, name, email1, phoneNumber, gender, about} = req.body
     if (phoneNumber == '' || phoneNumber == NaN || phoneNumber == null) {
         phoneNumber = null
     } else {
@@ -50,6 +66,7 @@ router.post('/editAccount', ensureAuthenticated, async (req, res) => {
             email: email1,
             phoneNumber: phoneNumber,
             gender: gender,
+            about: about,
         },
         {where: {id: req.user.id}}
         ).then((user) => {

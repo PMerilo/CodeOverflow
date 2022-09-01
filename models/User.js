@@ -39,8 +39,11 @@ User.init(
             allowNull: false,
             defaultValue: false,
         },
-        tfa: {
-            type: sequelize.DataTypes.STRING,
+        about: {
+            type: sequelize.DataTypes.TEXT('long'),
+        },
+        cf: {
+            type: sequelize.DataTypes.FLOAT,
         },
     },
     {
