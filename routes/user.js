@@ -29,7 +29,7 @@ router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
             limit: 2,
             offset: 2
         }).catch(err => console.log(err))
-        res.render("user/profile", {user, belong, listings: listings.rows, listings2: listings2.rows, l1: listings.count,l2: listings2.count})
+        res.render("user/profile", {user, belong, listings: listings.rows, listings2: listings2.rows, l1: listings.count,l2: listings2.count-2})
     } else {
         flashMessage(res, 'error', 'No profile found')
         res.redirect('/')
