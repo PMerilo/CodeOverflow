@@ -39,7 +39,7 @@ router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
 
 router.get('/account', ensureAuthenticated, async (req, res) => {
     user = await User.findByPk(req.user.id)
-    res.render("user/myAccount", {user})
+    res.render("user/myaccount", {user})
 })
 
 router.post('/account', ensureAuthenticated, async (req, res) => {
