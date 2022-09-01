@@ -41,7 +41,8 @@ router.post('/getProduct', async (req, res) => {
             category: 
             {
                 [op.like]:'%'+category+'%'
-            }
+            },
+            sold: { [op.ne]:  1 }
         },
         order: sortby,
         raw: true,

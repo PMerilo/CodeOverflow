@@ -65,7 +65,9 @@
                         <button class="btn btn-info offer-btn mx-3" style="display: none;">Counter Offer</button>
                         <button class="btn btn-success offer-btn mx-3" style="display: none;">Accept Offer</button>
                         <button class="btn btn-danger offer-btn mx-3" style="display: none;">Refuse Offer</button>
-                        <button class="btn btn-success payment-btn mx-3" style="display: none;">Make Payment</button>
+                        <button class="btn btn-success payment-btn mx-3" style="display: none;"
+                            onclick="checkoutcheck()">Make Online
+                            Payment</button>
                         <button class="btn btn-info offer-btn mx-3" style="display: none;">Mark as sold</button>
                     </div>
                 </div>
@@ -89,6 +91,29 @@
     </div>
 </div>
 <script defer>
+    function checkoutcheck() {
+        console.log("hiii")
+        fetch("http://localhost:5000/payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: window.location.pathname.split('/').pop(),
+                curl: window.location.pathname
+            }),
+        })
+            .then(res => {
+                if (res.ok) return res.json()
+                return res.json().then(json => Promise.reject(json))
+            })
+            .then(({ url }) => {
+                window.location = url
+            })
+            .catch(e => {
+                console.error(e.error)
+            })
+    }
     $(document).ready(async function () {
         let { userId } = await $.get('/currentUser')
         var $chatForm = $('#chat-form')
@@ -391,5 +416,7 @@
                 }
             })
         })
+
+
     })
 </script>
