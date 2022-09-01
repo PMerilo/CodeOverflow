@@ -16,7 +16,7 @@
     </div>
     <div class="item-right col-md-3 text-center" style="float: right">
         {{#product}}
-        <h3><img src="/images/items/{{'user.profilepic'}}" style="height:60px">{{Owner}}</h3>
+        <h3><img src="{{'user.profilepic'}}" style="height:60px">{{Owner}}</h3>
         {{/product}}
         {{#if (checkOwner id product.OwnerID)}}
         <button class="modal-button chat-owned" style="border: none;"><span><a href="/inbox/new/{{sku}}" style="color:white; font-weight:bold;">view chats</a></span></button>
