@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: [Product, Msg, 'buyer'],
+        include: { all: true },
         order: [
             [Msg, 'createdAt', 'DESC']
         ]
@@ -45,7 +45,7 @@ router.get('/new/:productId', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: [Product, Msg, 'buyer'],
+        include: { all: true },
         order: [
             [Msg, 'createdAt', 'DESC']
         ]
@@ -72,11 +72,22 @@ router.post('/send', async (req, res) => {
         await chat.addMsg(msg)
 
     } else {
+        let status = "Waiting for offer"
+        if (offer) {
+            status = "Offered"
+        }
+        console.log(content.split('$')[1])
         let [chat, created] = await Chat.findOrCreate({
             where: {
                 productId: productId,
                 buyerId: req.user.id,
 
+            },
+            defaults: {
+                productId: productId,
+                buyerId: req.user.id,
+                status: status,
+                offer: content.split('$')[1]
             }
         })
             .catch((error) => {
@@ -96,7 +107,7 @@ router.post('/markasseen', async (req, res) => {
 })
 
 router.get('/:chatId', async (req, res) => {
-    let chat = await Chat.findByPk(req.params.chatId, { include: Product})
+    let chat = await Chat.findByPk(req.params.chatId, { include: Product })
     if (chat === null) {
         return res.sendStatus(404)
     } else if (chat.buyerId != req.user.id && chat.product.OwnerID != req.user.id) {
@@ -109,7 +120,7 @@ router.get('/:chatId', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: [Product, Msg, 'buyer'],
+        include: { all: true },
         order: [
             [Msg, 'createdAt', 'DESC']
         ]

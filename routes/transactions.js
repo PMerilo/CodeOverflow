@@ -124,9 +124,4 @@ router.post('/withdraw', ensureAuthenticated, async (req, res) => {
     res.redirect("/user/account")
 })
 
-router.post('/sold/:sku', ensureAuthenticated, async (req, res) => {
-    console.log(req.params.sku)
-    await Product.update({sold: 1}, {where: { sku: req.params.sku}})
-    res.redirect("/myListing")
-})
 module.exports = router
