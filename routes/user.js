@@ -144,7 +144,7 @@ router.post('/changePassword', ensureAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/addtowishlist/:id', async (req, res) => {
+router.get('/addtowishlist/:id', ensureAuthenticated,async (req, res) => {
     if (req.user.id) {
         product = await Product.findByPk(req.params.id);
         wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})
@@ -172,7 +172,7 @@ router.get('/addtowishlist/:id', async (req, res) => {
     
 })
 
-router.get('/deletewishlist/:id', async (req, res) => {
+router.get('/deletewishlist/:id', ensureAuthenticated,async (req, res) => {
     if (req.user.id) {
         product = await Product.findByPk(req.params.id);
         wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})

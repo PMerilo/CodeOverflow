@@ -9,7 +9,7 @@
                 alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px;height: 150px !important; z-index: 1">
                 {{#if belong}}
-                    <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" href="/user/account"
+                    <a type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" href="/user/editAccount"
                         style="z-index: 1;">
                         Edit profile
                     </a>
@@ -23,7 +23,7 @@
           <div class="p-4 text-black" style="background-color: #f8f9fa;">
             <div class="d-flex justify-content-end text-center py-1">
               <div>
-                <p class="mb-1 h5">253</p>
+                <p class="mb-1 h5">{{#add l1 l2}}{{/add}}</p>
                 <p class="small text-muted mb-0">Listings</p>
               </div>
               {{!-- <div class="px-3">
@@ -51,16 +51,16 @@
               {{#equals l1 1}}
                 <div class="row g-2">
                 {{#each listings}}
-                  <div class="col mb-2"><img src="/images/items/{{posterURL}}"
-                  alt="image 1" class="w-100 rounded-3" height="200px"></div>
+                  <div class="col mb-2"><a href="/viewOnelisting/{{sku}}"><img src="/images/items/{{posterURL}}"
+                  alt="image 1" class="w-100 rounded-3" height="200px"></a></div>
                   <div class="col mb-2">
                   </div>
                 {{/each}}
               {{else}}
               <div class="row g-2">
                 {{#each listings}}
-                  <div class="col mb-2"><img src="/images/items/{{posterURL}}"
-                  alt="image 1" class="w-100 rounded-3" height="200px"></div>
+                  <div class="col mb-2"><a href="/viewOnelisting/{{sku}}"><img src="/images/items/{{posterURL}}"
+                  alt="image 1" class="w-100 rounded-3" height="200px"></a></div>
                 {{/each}}
               </div>
               {{/equals}}
@@ -71,16 +71,16 @@
               {{#equals l2 1}}
                 <div class="row g-2">
                 {{#each listings2}}
-                  <div class="col mb-2"><img src="/images/items/{{posterURL}}"
-                  alt="image 1" class="w-100 rounded-3" height="200px"></div>
+                  <div class="col mb-2"><a href="/viewOnelisting/{{sku}}"><img src="/images/items/{{posterURL}}"
+                  alt="image 1" class="w-100 rounded-3" height="200px"></a></div>
                   <div class="col mb-2">
                   </div>
                 {{/each}}
               {{else}}
               <div class="row g-2">
                 {{#each listings2}}
-                  <div class="col mb-2"><img src="/images/items/{{posterURL}}"
-                  alt="image 1" class="w-100 rounded-3" height="200px"></div>
+                  <div class="col mb-2"><a href="/viewOnelisting/{{sku}}"><img src="/images/items/{{posterURL}}"
+                  alt="image 1" class="w-100 rounded-3" height="200px"></a></div>
                 {{/each}}
               </div>
               {{/equals}}
