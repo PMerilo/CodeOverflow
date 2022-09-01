@@ -171,7 +171,7 @@ router.post('uploadsubmit', (req,res)=>{
 	}
 })
 
-router.get('/currentUser', (req, res, next) => {
+router.get('/currentUser', ensureAuthenticated, (req, res, next) => {
     let data
     if (req.isAuthenticated()) {
         data = {userId: req.user.id}
