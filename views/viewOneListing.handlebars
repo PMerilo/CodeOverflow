@@ -1,16 +1,26 @@
-{{#product}}
+
 <div class="container">
     <div class="row align-items-start">
         <div class="image col-md-12 border bg-secondary">
-            <center><img class='img-fluid align-items-center' src="/images/items/{{posterURL}}"></center>
+            <div style="margin-top: 5px;">
+                <button class="like-box" style="float: right; padding-right: 10px; border: none;">
+                    <div style="float:right;padding-top:5px;padding-bottom:5px">Likes</div>
+                    {{#unless wishlist}}
+                        <a href="/user/addtowishlist/{{product.sku}}"><i class='bx bx-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{else}}
+                        <a href="/user/deletewishlist/{{product.sku}}"><i class='bx bxs-bookmark-heart'  style="float:right; padding:5px; text-decoration: none; color: black"></i></a>
+                    {{/unless}}
+                </button>
+            </div>
+            <center><img class='img-fluid align-items-center' src="/images/items/{{product.posterURL}}"></center>
         </div>
     </div>
     <div class="item-right col-md-3 text-center" style="float: right">
-        <h3>{{Owner}}</h3>
+        <h3>{{product.Owner}}</h3>
         <button class="modal-button chat"><span>view chats</span></button>
         <button class="modal-button other">
             <img src="https://mweb-cdn.karousell.com/build/listing-edit-280S39ckEp.svg" style="width: 16px !important;">
-                <span><a href="/editListing/{{sku}}">
+                <span><a href="/editListing/{{product.sku}}">
                     Edit Listing</a>
                 </span>
             </button>
@@ -27,13 +37,13 @@
     </div>
     <div class="row align-items-center">
         <div class="col-md-10">
-            <h3 style="font-weight: normal;">{{name}}</h3>
-            <h3>${{price}}</h3>
+            <h3 style="font-weight: normal;">{{product.name}}</h3>
+            <h3>${{product.price}}</h3>
             <br>
             <h4>Description</h4>
             <p id="uploadedAt"></p>
-            <input type="hidden" value="{{createdAt}}" id="created">
-            <p>{{description}}</p>
+            <input type="hidden" value="{{product.createdAt}}" id="created">
+            <p>{{product.description}}</p>
         </div>
 
     </div>
@@ -53,14 +63,13 @@
 			</div>
 			<div class="modal-footer justify-content-center">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form method="post" action="/deleteListing/{{sku}}">
+                <form method="post" action="/deleteListing/{{product.sku}}">
 				<button type="submit" class="btn btn-danger">Delete</button>
                 </form>
 			</div>
 		</div>
 	</div>
 </div>    
-{{/product}}
 
 <style>
     .modal-confirm {		

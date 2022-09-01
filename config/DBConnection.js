@@ -17,8 +17,8 @@ const setUpDB = (drop) => {
             Chat.belongsTo(User, {as: "buyer", foreignKey: 'buyerId'} )
             User.hasMany(Chat, {as: "buyer", foreignKey: 'buyerId'} )
 
-            Chat.belongsTo(Product, {as: "product", foreignKey: 'productId'} )
-            Product.hasMany(Chat, {as: "product", foreignKey: 'productId'} )
+            Chat.belongsTo(Product, {foreignKey: 'productId'} )
+            Product.hasMany(Chat, {foreignKey: 'productId'} )
 
             Msg.belongsTo(Chat)
             Chat.hasMany(Msg)
@@ -30,8 +30,8 @@ const setUpDB = (drop) => {
             User.hasMany(Wishlist);
             Wishlist.belongsTo(Product);
 
-            // Product.belongsTo(User)
-            // User.hasMany(Product)
+            Product.belongsTo(User, {foreignKey: 'OwnerID'})
+            User.hasMany(Product, {foreignKey: 'OwnerID'})
 
 
             mySQLDB.sync({
