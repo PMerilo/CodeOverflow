@@ -107,7 +107,8 @@ router.post('/getCat/:id', async (req, res) => {
 
 router.get('/viewOneListing/:id', async (req, res) => {
     var product = await Product.findByPk(req.params.id, {raw: true})
-    res.render('viewOneListing', {product: product})
+    const wishlist = await Wishlist.findOne({where: {productSku: req.params.id, userId: req.user.id}})
+    res.render('viewOneListing', {product: product, wishlist: wishlist})
 })
 
 
