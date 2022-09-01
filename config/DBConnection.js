@@ -3,6 +3,8 @@ const Product = require('../models/Product');
 const Chat = require('../models/Chat');
 const User = require('../models/User');
 const Msg = require('../models/Msg');
+const Cart = require('../models/Cart');
+const CartProduct = require('../models/CartProduct');
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
@@ -17,6 +19,12 @@ const setUpDB = (drop) => {
 
             Chat.belongsTo(Product, {as: "product", foreignKey: 'productId'} )
             Product.hasMany(Chat, {as: "product", foreignKey: 'productId'} )
+
+            Product.belongsToMany(Cart, { through: CartProduct })
+            Cart.belongsToMany(Product, { through: CartProduct })
+
+            User.hasOne(Cart)
+            Cart.belongsTo(User)
 
             Msg.belongsTo(Chat)
             Chat.hasMany(Msg)
