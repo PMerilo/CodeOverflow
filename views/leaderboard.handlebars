@@ -6,7 +6,11 @@
                 <div class="pos">
                     2
                 </div>
-                <img src="{{profilepic}}" alt="" class="pic">
+                {{#if profilepic}}
+                  <img src="{{profilepic}}" alt="" class="pic">
+                {{else}}
+                  <img src="/images/user_img.png" alt="" class="pic">
+                {{/if}}
                 <div class="name">
                     {{name}}
                 </div>
@@ -22,7 +26,11 @@
                 <div class="pos">
                     1
                 </div>
-                <img src="{{profilepic}}" alt="" class="pic">
+                {{#if profilepic}}
+                  <img src="{{profilepic}}" alt="" class="pic">
+                {{else}}
+                  <img src="/images/user_img.png" alt="" class="pic">
+                {{/if}}
                 <div class="name">
                     {{name}}
                 </div>
@@ -38,7 +46,11 @@
                 <div class="pos">
                     3
                 </div>
-                <img src="{{profilepic}}" alt="" class="pic">
+                {{#if profilepic}}
+                  <img src="{{profilepic}}" alt="" class="pic">
+                {{else}}
+                  <img src="/images/user_img.png" alt="" class="pic">
+                {{/if}}
                 <div class="name">
                     {{name}}
                 </div>
@@ -56,7 +68,11 @@
                 <div class="pos">
                     {{#add @index 4}}{{/add}}
                 </div>
-                <img src="{{profilepic}}" alt="" class="pic">
+                {{#if profilepic}}
+                  <img src="{{profilepic}}" alt="" class="pic">
+                {{else}}
+                  <img src="/images/user_img.png" alt="" class="pic">
+                {{/if}}
                 <div class="name">
                     {{name}}
                 </div>
