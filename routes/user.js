@@ -29,7 +29,7 @@ router.get('/profile/:id', ensureAuthenticated, async (req, res) => {
             limit: 2,
             offset: 2
         }).catch(err => console.log(err))
-        res.render("user/profile", {user, belong, listings: listings.rows, listings2: listings2.rows, l1: listings.count,l2: listings2.count})
+        res.render("user/profile", {user, belong, listings: listings.rows, listings2: listings2.rows, l1: listings.count,l2: listings2.count-2})
     } else {
         flashMessage(res, 'error', 'No profile found')
         res.redirect('/')
@@ -144,7 +144,7 @@ router.post('/changePassword', ensureAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/addtowishlist/:id', async (req, res) => {
+router.get('/addtowishlist/:id', ensureAuthenticated,async (req, res) => {
     if (req.user.id) {
         product = await Product.findByPk(req.params.id);
         wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})
@@ -172,7 +172,7 @@ router.get('/addtowishlist/:id', async (req, res) => {
     
 })
 
-router.get('/deletewishlist/:id', async (req, res) => {
+router.get('/deletewishlist/:id', ensureAuthenticated,async (req, res) => {
     if (req.user.id) {
         product = await Product.findByPk(req.params.id);
         wishlist = await Wishlist.findOne({where: {productSku: req.params.id}})
