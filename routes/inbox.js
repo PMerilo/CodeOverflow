@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: ['product', Msg, 'buyer'],
+        include: [Product, Msg, 'buyer'],
         order: [
             [Msg, 'createdAt', 'DESC']
         ]
@@ -45,7 +45,7 @@ router.get('/new/:productId', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: ['product', Msg, 'buyer'],
+        include: [Product, Msg, 'buyer'],
         order: [
             [Msg, 'createdAt', 'DESC']
         ]
@@ -59,7 +59,7 @@ router.post('/send', async (req, res) => {
         offer = false
     }
     let chat
-    console.log(req.body);
+    // console.log(req.body);
 
     let msg = await Msg.create({
         content: content,
@@ -68,7 +68,7 @@ router.post('/send', async (req, res) => {
     })
 
     if (chatId) {
-        chat = await Chat.findByPk(chatId, { include: ['product', Msg, 'buyer'] })
+        chat = await Chat.findByPk(chatId, { include: [Product, Msg, 'buyer'] })
         await chat.addMsg(msg)
 
     } else {
@@ -86,7 +86,7 @@ router.post('/send', async (req, res) => {
         await chat.addMsg(msg)
         chatId = chat.id
     }
-    return res.json({ content, productId, chatId, userId: req.user.id, chat: await Chat.findByPk(chatId, { include: ['product', Msg, 'buyer'] }), offer })
+    return res.json({ content, productId, chatId, userId: req.user.id, chat: await Chat.findByPk(chatId, { include: [Product, Msg, 'buyer'] }), offer })
 })
 
 router.post('/markasseen', async (req, res) => {
@@ -96,7 +96,7 @@ router.post('/markasseen', async (req, res) => {
 })
 
 router.get('/:chatId', async (req, res) => {
-    let chat = await Chat.findByPk(req.params.chatId, { include: "product" })
+    let chat = await Chat.findByPk(req.params.chatId, { include: Product})
     if (chat === null) {
         return res.sendStatus(404)
     } else if (chat.buyerId != req.user.id && chat.product.OwnerID != req.user.id) {
@@ -109,7 +109,7 @@ router.get('/:chatId', async (req, res) => {
                 "$product.OwnerID$": req.user.id
             }
         },
-        include: ['product', Msg, 'buyer'],
+        include: [Product, Msg, 'buyer'],
         order: [
             [Msg, 'createdAt', 'DESC']
         ]

@@ -2,7 +2,7 @@ const socket = io({ autoConnect: false });
 
 $.get('/currentUser', ({ userId }) => {
     if (userId) {
-        socket.auth = { userId }
+        socket.auth = { id:userId }
         socket.connect()
     }
 })

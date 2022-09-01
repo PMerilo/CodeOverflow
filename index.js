@@ -35,6 +35,10 @@ const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
+    socket.userid = socket.handshake.auth.id
+	socket.join(`User ${socket.userid}`)
+    // console.log(socket.rooms) 
+
     messagingHandler(io, socket)
     console.log(`${socket.id} has connected`);
 }
