@@ -15,7 +15,11 @@ const upload = require('../helpers/productUpload');
 
 
 router.get('/', async (req, res) => {
-    res.render("index2")
+    res.render("index")
+})
+
+router.get('/products', async (req, res) => {
+    res.render('index2')
 })
 
 

@@ -27,6 +27,7 @@
           <option value="Most Recent" id="Most-Recent">Most Recent</option>
           <option value="Oldest to Newest" id="Oldest-to-Newest">Oldest to Newest</option>
         </select>
+  <h3 id="search"></h3>
 <div class="container ">
   <div class="row mt-3 product-items">
     {{!-- product --}}
@@ -35,14 +36,7 @@
 <script>
 var page = 0;
 var working = false;
-var search = getParameterByName('search');
-var category = getParameterByName('category');
-var brand = getParameterByName('brand');
-var min = getParameterByName('min');
-var max = getParameterByName('max');
-if(search == null){
-    search =""
-}
+
 function changeHTML(){
   button = document.getElementById('filter-btn')
   if(button.innerHTML == `<span class="fas fa-angle-left" id="filter-angle"></span> 
@@ -77,6 +71,14 @@ window.addEventListener('load', setSort)
 window.addEventListener("scroll",loadProducts);
 var category = getParameterByName('category')
 var sortby = getParameterByName('sortby')
+
+window.addEventListener('load', function(){
+
+  if(category != undefined){
+    document.getElementById("search").innerHTML = "showing results for " + category
+  }
+})
+
 function setSort(){
   sortby = sortby.split(' ').join('-')
   document.getElementById('default-option').removeAttribute('selected')
