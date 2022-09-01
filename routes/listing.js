@@ -11,6 +11,7 @@ const ensureAuthenticated = require('../helpers/auth');
 const fs = require('fs');
 const upload = require('../helpers/productUpload');
 const sequelize = require('sequelize');
+const Wishlist = require('../models/Wishlist');
 const op = sequelize.Op
 
 router.post('/getProduct', async (req, res) => {
@@ -66,7 +67,9 @@ router.get('/viewProduct/:id', async (req, res) => {
          {
             raw: true,
         });
-    res.render('viewProduct', {product: product});
+
+    const wishlist = await Wishlist.findOne({where: {productSku: req.params.id, userId: req.user.id}})
+    res.render('viewProduct', {product: product, wishlist: wishlist});
 })
 
 router.use(ensureAuthenticated)
@@ -136,6 +139,7 @@ router.get('/myListing', (req, res) => {
 
 router.post('/deleteListing/:id', async (req, res) => {
     ownerId = await Product.findByPk(req.params.id, {raw: true, attributes: ['OwnerID']});
+    await Wishlist.destroy({where: {productSku: req.params.id}})
     if(req.user.id == ownerId.OwnerID){
         Product.destroy({where: {sku: req.params.id}})
         flashMessage(res, 'success', 'Listing has been deleted successfully')
