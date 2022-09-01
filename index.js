@@ -140,9 +140,15 @@ app.engine(
 			formatDate(date, targetFormat) {
 				return moment(date).format(targetFormat);
 			},
+			checkOwner(userId, OwnerId){
+				if(userId == OwnerId){
+					return true;
+				}return false;
+			},
 			add(v1, v2) {
 				return parseInt(v1) + parseInt(v2);
 			},
+
 		},
 	})
 );
