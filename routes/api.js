@@ -1,5 +1,6 @@
 const express = require('express');
 const { Op } = require('sequelize');
+const ensureAuthenticated = require('../helpers/auth');
 const router = express.Router();
 const flashMessage = require('../helpers/messenger');
 const Chat = require('../models/Chat');
@@ -24,7 +25,7 @@ router.get('/chat/:chatId', async (req, res) => {
     return res.json(chat)
 })
 
-router.get('/user/chats', async (req, res) => {
+router.get('/user/chats', ensureAuthenticated, async (req, res) => {
     let chats = await Chat.findAll({
         where: {
             [Op.or]: {
