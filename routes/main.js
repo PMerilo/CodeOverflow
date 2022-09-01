@@ -171,6 +171,29 @@ router.post('uploadsubmit', (req,res)=>{
 	}
 })
 
+router.get('/leaderboard', async (req, res) => {
+    const first = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+    }).catch(err => console.log(err))
+    const second = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+        offset: 1
+    }).catch(err => console.log(err))
+    const third = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 1,
+        offset: 2
+    }).catch(err => console.log(err))
+    const rest = await User.findAll({
+        order: [['cf', 'DESC']],
+        limit: 7,
+        offset: 3
+    }).catch(err => console.log(err))
+    res.render('leaderboard', {first: first, second: second, third: third, rest: rest})
+})
+
 router.get('/currentUser', ensureAuthenticated, (req, res, next) => {
     let data
     if (req.isAuthenticated()) {

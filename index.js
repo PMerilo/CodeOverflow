@@ -135,6 +135,9 @@ app.engine(
 			formatDate(date, targetFormat) {
 				return moment(date).format(targetFormat);
 			},
+			add(v1, v2) {
+				return parseInt(v1) + parseInt(v2);
+			},
 		},
 	})
 );

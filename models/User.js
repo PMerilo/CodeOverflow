@@ -44,6 +44,7 @@ User.init(
         },
         cf: {
             type: sequelize.DataTypes.FLOAT,
+            defaultValue: 0,
         },
     },
     {
