@@ -4,7 +4,7 @@ const flashMessage = require('../helpers/messenger');
 
 const Product =  require('../models/Product')
 const User = require('../models/User');
-
+const { Op } = require('sequelize')
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const ensureAuthenticated = require('../helpers/auth');
@@ -144,7 +144,8 @@ router.post('/createListing', (req, res) => {
         posterURL:posterUpload,
         quantity: 1,
         OwnerID: req.user.id,
-        Owner: req.user.name
+        Owner: req.user.name,
+        sold:0
     });
     res.redirect('/myListing');
 });

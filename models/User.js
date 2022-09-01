@@ -45,6 +45,20 @@ User.init(
         cf: {
             type: sequelize.DataTypes.FLOAT,
         },
+        total_balance: {
+            type: sequelize.DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        withdrawn_amount: {
+            type: sequelize.DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        bankAccount: {
+            type: sequelize.DataTypes.STRING,
+            allowNull: true,
+        },
     },
     {
         freezeTableName: true,
