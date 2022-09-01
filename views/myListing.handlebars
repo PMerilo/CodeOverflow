@@ -1,245 +1,226 @@
-<link rel="stylesheet" href="/styles/homepage.css">
-<link rel="stylesheet" href="/styles/product.css">
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
-
-
+<link rel="stylesheet" href="styles/product.css">
+<h1>My Listing</h1>
 <div class="container ">
-  <h1>My Wishlist</h1>
   <div class="row mt-3 product-items">
     {{!-- product --}}
   </div>
 </div>
+
 <script>
-  var page = 0;
-  var working = false;
-
-
-  function getParameterByName(name, url = window.location.href) {
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-
-  window.addEventListener("load", loadProducts);
-  window.addEventListener("scroll", loadProducts);
-  var category = getParameterByName('category')
-  $('.slider-nav').slick({
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    focusOnSelect: true,
-  });
-
-  $('.product-showcase').slick({
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    dots: true,
-    focusOnSelect: true,
-  });
-  $.ajax({
-    method: 'post',
-    url: '/totalPages',
-    success: function (data) {
-      totalPages = (parseInt(data['page']))
-      page = 0
-    }
-  })
-  function submitSorting(element) {
-    if (category == "" || category == null) {
-      window.location.replace('/?sortby=' + element.value)
-    } else {
-      window.location.replace('/?category=' + category + '&sortby=' + element.value)
-    }
-  }
-
-  function loadProducts() {
-    if (working == false) {
-      working = true;
+  $(document).ready(function () {
+    var Container = document.getElementsByClassName("wrapper")
+    console.log(Container)
+    for (i = 1; i < 6; i++) {
+      var sku = Container[i].getElementsByClassName('sku')[0].value
+      var ele = Container[i].getElementsByClassName('wishlist')[0]
       $.ajax({
-        method: 'post',
-        url: '/getListing',
-        data: {
-          page: page,
-        },
-        success: function (data) {
-          wishlist = data['product']
-          for (var a in wishlist) {
-            id = wishlist[a]['sku']
-            image = wishlist[a]['posterURL']
-            price = wishlist[a]['price']
-            name = wishlist[a]['name']
-            desc = wishlist[a]['description']
-            sold = wishlist[a]['sold']
-            price_info = `<p class = "product-price"></p>
-                                    <p class = "product-price">$`+ parseFloat(price) + `</p>
-                                    </div>`
-            modal_id = "#details_" + id
-            image = `<img src="/images/items/` + image + `" style="width: 100%; max-height: 100%;">`
-            btns = `<button class="btn-buy" style="text-decoration: none; color: black; text-align:center;">
-                        <a href="/viewProduct/`+ id + `">details</a>
-                        </button>`
-
-            productInfo = `<div class="product-info">
-                                        <div class="product-info-top">
-                                            <h2 class = "sm-title">`+ wishlist[a]['Owner'] + `</h2>
-                                        </div>
-                                        <a href="/viewProduct/`+ id + `" class="product-name">` + name + `</a>
-                                        `+ price_info
-            image_id = `<div class='product-img'><a href="/viewProduct/` + id + `">` + image + `</a></div>`
-            if (sold == 1) {
-              overlay = `<div class="product-content">` + image_id + `<div class = "product-btns">` + btns + `</div></div>
-                                  <div class="overlay">
-                                    <div class="content">
-                                      <img src="/images/hanger-line.png" width="100px" height="100px">
-                                      <p>Sold</p>
-                                    </div>
-                                  </div>`
-            } else {
-              overlay = `<div class="product-content">` + image_id + `<div class = "product-btns">` + btns + `</div></div>`
-            }
-
-            $(".product-items").append(`<div class='product'>` + overlay + productInfo + `</div>`)
-            /*$('body').append(modal)*/
-
+        url: "/wishlist",
+        method: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify({ sku: sku, status: "check" }),
+        success: function (res) {
+          if (res.response == 'add' && res.status == "check") {
+            ele.classList.add('bxs-bookmark-heart')
+            console.log("added")
+          } else if (res.response == 'remove' && res.status == "check") {
+            ele.classList.remove('bxs-bookmark-heart')
+            console.log("removed")
           }
-          page += 1
-          setTimeout(function () {
-            working = false;
-          }, 500)
         }
       })
+    }
+  })
+
+  document.querySelectorAll('.button').forEach(button => button.addEventListener('click', e => {
+    if (!button.classList.contains('loading')) {
+
+      button.classList.add('loading');
+
+      setTimeout(() => button.classList.remove('loading'), 3700);
+    }
+    e.preventDefault();
+  }));
+
+$.ajax({
+  method:'post',
+  url: '/totalPages',
+  success: function(data){
+    totalPages = (parseInt(data['page']))
+    console.log(totalPages)
+    page = 0
+  }
+})
+
+window.addEventListener('load', loadProduct)
+window.addEventListener('scroll', loadProduct)
+
+var working = false
+var page = 0
+function loadProduct() {
+    if(working == false){
+        working = true;
+        $.ajax({
+    method: 'post',
+    url: '/getListing',
+    data: {
+      page: page,
+    },
+    success: function(data){
+      products = data['products']
+                    products = data['products']
+                for(var a in products){
+                    id = products[a]['sku']
+                    image = products[a]['posterURL']
+                    price = products[a]['price']
+                    name = products[a]['name']
+                    desc = products[a]['description'] 
+                    sold = products[a]['sold']                   
+                    price_info = `<p class = "product-price"></p>
+                                    <p class = "product-price">$`+parseFloat(price)+`</p>
+                                    </div>`
+                    modal_id = "#details_" + id
+                    image = `<img src="/images/items/`+ image + `" style="width: 100%; max-height: 100%;">`
+                    btns = `<button class="btn-buy" style="text-decoration: none; color: black; text-align:center;">
+                        <a href="/viewOneListing/`+id+`">details</a>
+                        </button>`
+
+                    productInfo = `<div class="product-info">
+                                        <div class="product-info-top">
+                                            <h2 class = "sm-title">`+products[a]['Owner'] +`</h2>
+                                        </div>
+                                        <a href="/viewOneListing/`+id+`" class="product-name">`+name+`</a>
+                                        `+price_info
+                      if(sold == 1){
+                      overlay = `<div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div><div class="overlay">
+                                    <div class="content">
+                                      <img src="/images/hanger-line.png" width="75px" height="75px">
+                                      <p>Sold Out</p>
+                                      <div class="btttn">
+                                        <button type="button" value="{{ this.product.sku }}" class="wishlist dark-btn"
+                                          onclick="wishLists(this)">Delete</button>
+                                      </div>
+                                    </div>
+                                  </div>`
+                    }else{
+                      overlay = `<div class="product-content">`+image_id+`<div class = "product-btns">`+btns+`</div></div>`
+                    }
+
+                      image_id = `<div class='product-img'><a href="/viewOneListing/`+id+`">`+image+`</a></div>`                                                                                                                                                                                                   
+                      $(".product-items").append(`<div class='product'>`+overlay+productInfo+`</div>`)
+                      /*$('body').append(modal)*/
+
+                }
+                page += 1
+                setTimeout(function(){
+                    working = false;
+                }, 500)
+            }
+            })
 
     }
-  }
+}
 </script>
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-
 <style>
-  .content {
-    padding-top: 50%;
-  }
+.overlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  height:100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    background: rgb(0, 0, 0);
-    background: rgba(0, 0, 0, 0.5);
-    /* Black see-through */
-    color: #f1f1f1;
-    width: 95%;
-    height: 100%;
-    transition: .5s ease;
-    opacity: 1;
-    color: white;
-    font-size: 20px;
-    padding: 20px;
-    text-align: center;
-  }
+.img .overlay {
+  opacity : 1;
+}
+  .cleared{
+  color: grey
+}
 
-  .img .overlay {
-    opacity: 1;
-  }
-
-  .cleared {
-    color: grey
-  }
-
-  .price-input {
-    width: 100%;
-    display: flex;
-    margin: 30px 0 35px;
-  }
-
-  .price-input .field {
-    display: flex;
-    width: 100%;
-    height: 45px;
-    align-items: center;
-  }
-
-  .field input {
-    width: 100%;
-    height: 100%;
-    outline: none;
-    font-size: 19px;
-    margin-left: 12px;
-    border-radius: 5px;
-    text-align: center;
-    border: 1px solid #999;
-    -moz-appearance: textfield;
-  }
-
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
-
-  .price-input .separator {
-    width: 130px;
-    display: flex;
-    font-size: 19px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .slider {
-    height: 5px;
-    position: relative;
-    background: #ddd;
-    border-radius: 5px;
-  }
-
-  .slider .progress {
-    height: 100%;
-    left: 25%;
-    right: 25%;
-    position: absolute;
-    border-radius: 5px;
-    background: #17A2B8;
-  }
-
-  .range-input {
-    position: relative;
-  }
-
-  .range-input input {
-    position: absolute;
-    width: 100%;
-    height: 5px;
-    top: -5px;
-    background: none;
-    pointer-events: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    height: 17px;
-    width: 17px;
-    border-radius: 50%;
-    background: #17A2B8;
-    pointer-events: auto;
-    -webkit-appearance: none;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  }
-
-  input[type="range"]::-moz-range-thumb {
-    height: 17px;
-    width: 17px;
-    border: none;
-    border-radius: 50%;
-    background: #17A2B8;
-    pointer-events: auto;
-    -moz-appearance: none;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-  }
+.price-input{
+  width: 100%;
+  display: flex;
+  margin: 30px 0 35px;
+}
+.price-input .field{
+  display: flex;
+  width: 100%;
+  height: 45px;
+  align-items: center;
+}
+.field input{
+  width: 100%;
+  height: 100%;
+  outline: none;
+  font-size: 19px;
+  margin-left: 12px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid #999;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.price-input .separator{
+  width: 130px;
+  display: flex;
+  font-size: 19px;
+  align-items: center;
+  justify-content: center;
+}
+.slider{
+  height: 5px;
+  position: relative;
+  background: #ddd;
+  border-radius: 5px;
+}
+.slider .progress{
+  height: 100%;
+  left: 25%;
+  right: 25%;
+  position: absolute;
+  border-radius: 5px;
+  background: #17A2B8;
+}
+.range-input{
+  position: relative;
+}
+.range-input input{
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  top: -5px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  height: 17px;
+  width: 17px;
+  border-radius: 50%;
+  background: #17A2B8;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+input[type="range"]::-moz-range-thumb{
+  height: 17px;
+  width: 17px;
+  border: none;
+  border-radius: 50%;
+  background: #17A2B8;
+  pointer-events: auto;
+  -moz-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
 </style>
