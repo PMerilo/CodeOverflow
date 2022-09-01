@@ -15,7 +15,11 @@ const upload = require('../helpers/productUpload');
 
 
 router.get('/', async (req, res) => {
-    res.render("index2")
+    res.render("index")
+})
+
+router.get('/products', async (req, res) => {
+    res.render('index2')
 })
 
 
@@ -126,6 +130,7 @@ router.post('/getListing', async (req, res) => {
 })
 
 router.get('/myListing', (req, res) => {
+    console.log(req.user.id)
     res.render('myListing')
 })
 

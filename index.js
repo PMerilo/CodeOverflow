@@ -13,6 +13,7 @@ const DBConnection = require('./config/DBConnection');
 
 //Routes
 const main = require('./routes/main')
+const transactions = require('./routes/transactions')
 const listing = require('./routes/listing')
 const api = require('./routes/api')
 const inbox = require('./routes/inbox')
@@ -157,6 +158,7 @@ app.all("/*", (req, res, next) => {
 //Set layout for all routes
 
 app.use("/", main)
+app.use("/", transactions)
 app.use("/", listing)
 app.use("/inbox", ensureAuthenticated, inbox)
 app.use("/api", api)
