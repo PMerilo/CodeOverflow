@@ -10,7 +10,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Products</a>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
@@ -18,19 +20,19 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li>
-              <a class="dropdown-item" href="">T-Shirts & Tops</a>
+              <a class="dropdown-item" href="/products?category=T-Shirts">T-Shirts & Tops</a>
             </li>
             <li>
-              <a class="dropdown-item" href="">Jeans & Joggers</a>
+              <a class="dropdown-item" href="/products?category=Jeans & Joggers">Jeans & Joggers</a>
             </li>
             <li>
-              <a class="dropdown-item" href="">Shorts & Skirts</a>
+              <a class="dropdown-item" href="/products?category=Shorts & Skirts">Shorts & Skirts</a>
             </li>
             <li>
-              <a class="dropdown-item" href="">Dresses</a>
+              <a class="dropdown-item" href="/products?category=Dresses">Dresses</a>
             </li>
             <li>
-              <a class="dropdown-item" href="">Hoodies</a>
+              <a class="dropdown-item" href="/products?category=hoodies">Hoodies</a>
             </li>
           </ul>
         </li>
@@ -64,7 +66,7 @@
           </a>
         </li>
         <li class="nav-item me-3 me-lg-0 cart">
-          <a class="nav-link bx bxs-heart" href="/wishlist">
+          <a class="nav-link bx bxs-heart" href="/user/wishlist">
           </a>
         </li>
 
@@ -76,28 +78,19 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             {{!-- if user is not authenticated --}}
             <li>
-              <a class="dropdown-item" href="/Profile">My Profile</a>
+              <a class="dropdown-item" href="/user/account">My Account</a>
             </li>
             <li>
-              <a class="dropdown-item" href="/myOrders">My Orders</a>
+              <a class="dropdown-item" href="/user/profile/{{user.id}}">My Profile</a>
             </li>
             <li>
-              <a class="dropdown-item" href="/wishlist">My Wishlist</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/user/requests">My Request</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/ticketHistory">Past Tickets</a>
+              <a class="dropdown-item" href="/user/wishlist">My Wishlist</a>
             </li>
             <li>
               <a class="dropdown-item" href="/createListing">Create Listing</a>
             </li>
             <li>
               <a class="dropdown-item" href="/myListing">My Listing</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="">{{user.spools}} spools</a>
             </li>
             <li>
               <a class="dropdown-item" href="/logout">Log Out</a>

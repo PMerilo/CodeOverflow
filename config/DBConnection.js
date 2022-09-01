@@ -5,6 +5,8 @@ const User = require('../models/User');
 const Msg = require('../models/Msg');
 const Cart = require('../models/Cart');
 const CartProduct = require('../models/CartProduct');
+const Wishlist = require('../models/Wishlist');
+
 // If drop is true, all existing tables are dropped and recreated
 const setUpDB = (drop) => {
     mySQLDB.authenticate()
@@ -31,6 +33,14 @@ const setUpDB = (drop) => {
 
             Msg.belongsTo(User)
             User.hasMany(Msg)
+
+            Wishlist.belongsTo(User);
+            User.hasMany(Wishlist);
+            Wishlist.belongsTo(Product);
+
+            // Product.belongsTo(User)
+            // User.hasMany(Product)
+
 
             mySQLDB.sync({
                 alter: true,

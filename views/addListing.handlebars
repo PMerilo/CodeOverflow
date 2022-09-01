@@ -3,14 +3,17 @@
     <h1 class="display-4">Create Listing</h1><span id="datetime"></span>
 
     <form method="POST" action="/createListing">
-      <div class="form-group col py-3">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" class="form-control">
+      <div class="form-group col py-3" id="posterUpload-div">
+        <div id="drop-area">
+          <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload" accept="image/png,image/jpeg,image/jpg,image/gif,image/jfif" onchange="imagePreview(event);" required/> 
+        </div>
+        <img src="" id="output" width="500px" height="flex">
 
       </div>
-      <div class="form-group col py-3">
+      <div class="form-group col py-3" style="display: none" id="div-category">
         <label for="category">Category</label>
-        <select name="category" id="category">
+        <select name="category" id="category" onchange="showMore()">
+          <option disabled="disabled" selected>Select A Category</option>
           <option value="T-Shirts & Tops">T-Shirts & Tops</option>
           <option value="Jeans & Joggers">Jeans & Joggers</option>
           <option value="Shorts & Skirts">Shorts & Skirts</option>
@@ -20,31 +23,25 @@
 
       </div>
       
-      <div class="form-group col py-3" id="">
+      <div class="form-group col py-3" style="display: none" id="div-name">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control">
+
+      </div>
+      <div class="form-group col py-3" style="display: none" id="div-price">
         <label for="price">Price</label>
         <input type="number" name="price" id="price" class="form-control" required>
 
       </div>
-      <div class="form-group col py-3">
+      <div class="form-group col py-3" style="display: none" id="div-desc">
         <label for="description">Description</label>
         <textarea name="description" id="description" cols="30" rows="10" class="form-control" required></textarea>
-
-
-      </div>
-      <div class="form-group col py-3">
-      <div id="drop-area">
-        <input type="file" class="custom-file-input" id="posterUpload" name="posterUpload" accept="image/png,image/jpeg,image/jpg,image/gif,image/jfif" onchange="imagePreview(event);" required/> 
-        <img src="" id="output" width="500px" height="flex">
-      </div>
-      <input type="submit" value="Create Listing" class="blue-btn"/>
+      <input type="submit" value="List Now" class="blue-btn" disabled style="display: none" id='submit'/>
     </form>
   </div>
 </div>
 
 <style type="text/css">
-#drop-area {
-  border: 1px dotted;
-}
 .blue-btn {
     width: 10rem;
     background: #2098ce;
@@ -89,5 +86,17 @@
       output.src = reader.result;
     };
     reader.readAsDataURL(event.target.files[0]);
+    showCategory()
   };
+  function showCategory(){
+    document.getElementById('div-category').style.display = null
+    document.getElementById('drop-area').style.border = null
+  }
+  function showMore(){
+    document.getElementById('submit').removeAttribute('disabled')
+    document.getElementById('submit').style.display = null
+    document.getElementById('div-desc').style.display = null
+    document.getElementById('div-price').style.display = null
+    document.getElementById('div-name').style.display = null
+  }
 </script>

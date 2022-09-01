@@ -1,12 +1,34 @@
-<link rel="stylesheet" href="/styles/homepage.css">
-<link rel="stylesheet" href="/styles/product.css">
+<link rel="stylesheet" href="styles/homepage.css">
+<link rel="stylesheet" href="styles/product.css">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.js"></script>
-
-
+{{!-- <div class="slider-nav">
+  <div class="slide1">
+    <img src="images/banner.jpg" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
+  </div>
+  <div class="slide2">
+    <img src="images/banner2.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
+  </div>
+  <div class="slide3">
+    <img src="images/banner3.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
+  </div>
+  <div class="slide4">
+    <img src="images/banner4.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
+  </div>
+  <div class="slide45">
+    <img src="images/banner5.png" alt="placeholder" id="banner" width="100%" class="img-responsive mt-5">
+  </div>
+</div> --}}
+  <select name="sort" id="sort" onchange="submitSorting(this)">
+          <option disabled="disabled" id='default-option'selected>sort by</option>
+          <option value="Highest To Lowest" id="Highest-To-Lowest">Highest To Lowest</option>
+          <option value="Lowest To Highest" id="Lowest-To-Highest">Lowest To Highest</option>
+          <option value="Most Recent" id="Most-Recent">Most Recent</option>
+          <option value="Oldest to Newest" id="Oldest-to-Newest">Oldest to Newest</option>
+        </select>
+  <h3 id="search"></h3>
 <div class="container ">
-  <h1>My Wishlist</h1>
   <div class="row mt-3 product-items">
     {{!-- product --}}
   </div>
@@ -15,6 +37,17 @@
 var page = 0;
 var working = false;
 
+function changeHTML(){
+  button = document.getElementById('filter-btn')
+  if(button.innerHTML == `<span class="fas fa-angle-left" id="filter-angle"></span> 
+     <span id="btn-txt">Hide Filters</span> `){
+      button.innerHTML = `<span class="fas fa-angle-left" id="filter-angle"></span> 
+     <span id="btn-txt" >Filters</span> `
+     }else{
+      button.innerHTML = `<span class="fas fa-angle-left" id="filter-angle"></span> 
+     <span id="btn-txt" >Hide Filters</span> `
+     }
+}
 
 function getParameterByName(name, url = window.location.href) {
     name = name.replace(/[\[\]]/g, '\\$&');
@@ -25,11 +58,27 @@ function getParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
+checkWishlist = function(id, wishlist){
+    if(id == wishlist){
+        return true;
+    }else{
+        return false
+    }
+}
+
 window.addEventListener("load", loadProducts);
 window.addEventListener('load', setSort)
 window.addEventListener("scroll",loadProducts);
 var category = getParameterByName('category')
 var sortby = getParameterByName('sortby')
+
+window.addEventListener('load', function(){
+
+  if(category != undefined){
+    document.getElementById("search").innerHTML = "showing results for " + category
+  }
+})
+
 function setSort(){
   sortby = sortby.split(' ').join('-')
   document.getElementById('default-option').removeAttribute('selected')
@@ -71,20 +120,20 @@ function loadProducts() {
         working = true;
         $.ajax({
     method: 'post',
-    url: '/user/getWishlist',
+    url: '/getProduct?category='+category,
     data: {
       page: page,
       sortby: sortby
     },
     success: function(data){
-      wishlist = data['wishlist']
-                    wishlist = data['wishlist']
-                for(var a in wishlist){
-                    id = wishlist[a]['product.sku']
-                    image = wishlist[a]['product.posterURL']
-                    price = wishlist[a]['product.price']
-                    name = wishlist[a]['product.name']
-                    desc = wishlist[a]['product.description']                    
+      products = data['products']
+                    products = data['products']
+                for(var a in products){
+                    id = products[a]['sku']
+                    image = products[a]['posterURL']
+                    price = products[a]['price']
+                    name = products[a]['name']
+                    desc = products[a]['description']                    
                     price_info = `<p class = "product-price"></p>
                                     <p class = "product-price">$`+parseFloat(price)+`</p>
                                     </div>`
@@ -96,7 +145,7 @@ function loadProducts() {
 
                     productInfo = `<div class="product-info">
                                         <div class="product-info-top">
-                                            <h2 class = "sm-title">`+wishlist[a]['product.Owner'] +`</h2>
+                                            <h2 class = "sm-title">`+products[a]['Owner'] +`</h2>
                                         </div>
                                         <a href="/viewProduct/`+id+`" class="product-name">`+name+`</a>
                                         `+price_info

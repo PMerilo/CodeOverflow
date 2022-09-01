@@ -14,6 +14,7 @@ const DBConnection = require('./config/DBConnection');
 //Routes
 const main = require('./routes/main')
 const transactions = require('./routes/transactions')
+const listing = require('./routes/listing')
 const api = require('./routes/api')
 const inbox = require('./routes/inbox')
 const user = require('./routes/user')
@@ -34,12 +35,6 @@ const onConnection = (socket) => {
 	socket.onAny((eventName, ...args) => {
 		console.log(eventName, "was just fired", args)
 	});
-
-    socket.on('chat:room', (chatId) => {
-        socket.join(`Chat ${chatId}`)
-        console.log(`${socket.id} has join room "Chat ${chatId}"`);
-    })
-
     messagingHandler(io, socket)
     console.log(`${socket.id} has connected`);
 }
@@ -138,6 +133,9 @@ app.engine(
 				}
 				return false;
 			},
+			formatDate(date, targetFormat) {
+				return moment(date).format(targetFormat);
+			},
 		},
 	})
 );
@@ -158,6 +156,7 @@ app.all("/*", (req, res, next) => {
 
 app.use("/", main)
 app.use("/", transactions)
+app.use("/", listing)
 app.use("/inbox", ensureAuthenticated, inbox)
 app.use("/api", api)
 app.use("/user", user)

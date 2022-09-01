@@ -17,8 +17,6 @@ User.init(
         name: {
             type: sequelize.DataTypes.STRING,
             allowNull: false,
-            unique: 'name',
-
         },
         email: {
             type: sequelize.DataTypes.STRING,
@@ -35,18 +33,18 @@ User.init(
         },
         password: {
             type: sequelize.DataTypes.STRING,
-            set(value) {
-                if (value) {
-                    const hash = bcrypt.hashSync(value, 10) + "";
-                    this.setDataValue("password", hash);
-                }
-            },
         },
         banned: {
             type: sequelize.DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-        }
+        },
+        about: {
+            type: sequelize.DataTypes.TEXT('long'),
+        },
+        cf: {
+            type: sequelize.DataTypes.FLOAT,
+        },
     },
     {
         freezeTableName: true,
