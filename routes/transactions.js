@@ -80,4 +80,11 @@ router.post('/payment', ensureAuthenticated, async (req, res) => {
         res.status(500).json({ error: e.message })
     }
 })
+
+router.post('/withdraw', ensureAuthenticated, async (req, res) => {
+    var user = await User.findByPk(req.user.id)
+    await User.decrement({ total_balance: req.body.amt }, { where: { id: req.user.id} })
+    await User.update({ bankAccount: req.body.bacc }, { where: { id: req.user.id} })
+    res.redirect("/user/account")
+})
 module.exports = router
