@@ -25,8 +25,21 @@ const fulfillOrder = async (session) => {
     var userid = session.metadata.userId
     var chatid = session.metadata.chatId
     var chat = await Chat.findOne({ where: { id: chatid }, include: "product" })
-    var user = await User.findByPk(userid)
-    await User.update({total_balance : parseFloat(user.total_balance).toFixed(2) + parseFloat(chat.offer).toFixed(2)},{where : {id : userid}})
+    let cf = 20
+    if (chat.product.category == "T-Shirts & Tops") {
+        cf = 20
+    } else if (chat.product.category == "Jeans & Joggers") {
+        cf = 40
+    } else if (chat.product.category == "Shorts & Skirts") {
+        cf = 30
+    } else if (chat.product.category == "Dresses") {
+        cf = 35
+    } else if (chat.product.category == "Hoodies") {
+        cf = 50
+    } 
+    var user = await User.findByPk(chat.product.OwnerID)
+    await User.update({total_balance : (parseFloat(user.total_balance) + parseFloat(chat.offer)).toFixed(2)},{where : {id : chat.product.OwnerID}})
+    await User.increment({cf : cf},{where : {id : userid}})
     await Product.update({sold : 1},{where : {sku : chat.productId}})
     await Chat.update({status : "Payment Made"},{where : {id : chatid}})
     var offer = true
@@ -109,5 +122,11 @@ router.post('/withdraw', ensureAuthenticated, async (req, res) => {
     await User.decrement({ total_balance: req.body.amt }, { where: { id: req.user.id} })
     await User.update({ bankAccount: req.body.bacc }, { where: { id: req.user.id} })
     res.redirect("/user/account")
+})
+
+router.post('/sold/:sku', ensureAuthenticated, async (req, res) => {
+    console.log(req.params.sku)
+    await Product.update({sold: 1}, {where: { sku: req.params.sku}})
+    res.redirect("/myListing")
 })
 module.exports = router

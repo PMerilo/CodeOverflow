@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="styles/homepage.css">
 <link rel="stylesheet" href="styles/product.css">
+<link rel="stylesheet" href="styles/btn.css">
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
 <link rel="stylesheet" type="text/css"
   href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
@@ -24,15 +25,17 @@
   </div>
 </div> --}}
 <div class="landing">
-  <div class="title-container">
-    <div class="title wow fadeInLeft" data-wow-delay="1s">
-      <h3>"That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human
-        being
-        who ever was, lived out their lives."</h3>
-      <h4 class="wow fadeInRight" data-wow-delay="1.2s">~ Carl Sagon</h4>
+  <div class="earth">
+    <div class="title-container">
+      <div class="title wow fadeInLeft" data-wow-delay="1s">
+        <h3>"That's home. That's us. On it everyone you love, everyone you know, everyone you ever heard of, every human
+          being
+          who ever was, lived out their lives."</h3>
+        <h4 class="wow fadeInRight" data-wow-delay="1.2s">~ Carl Sagon</h4>
+      </div>
     </div>
+    <canvas id="c" class="wow fadeIn" data-wow-delay="0.2s" data-wow-duration="0.4s"></canvas>
   </div>
-  <canvas id="c" class="wow fadeInRight" data-wow-delay="0.2s"></canvas>
   <h1 class="cc wow fadeInDown" data-wow-delay="0.2s">CLIMATE CHANGE</h1>
   {{!-- <iframe width="560" height="315"
     src="https://www.youtube-nocookie.com/embed/gXXOkhoki8s?controls=0&amp;start=17&end=27&playlist=gXXOkhoki8s&loop=1"
@@ -46,37 +49,66 @@
         width="560" height="315" data-wow-delay="0.2s">
     </div>
     <div class="col-12 col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
-      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
-        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
-        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+      <div class="card home-card">
+        <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
+          the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere
+          that
+          accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+      </div>
     </div>
   </div>
   <div class="txt row">
     <div class="col-12 col-lg-6  wow fadeInLeft" data-wow-delay="0.2s">
-      <p>The global fast fashion industry is responsible for 10% of the world's greenhouse gas emissions, according to
-        the United Nations. It adds massively to the amount of carbon dioxide and methane present in the atmosphere that
-        accelerates global warming. Fast fashion has a catastrophic contribution to climate change.</p>
+      <div class="card home-card">
+        <p>Human activities are at the root of this phenomenon. Specifically, since the industrial revolution, carbon
+          dioxide and other greenhouse gas emissions have raised temperatures, even higher in the poles, and as a
+          result, glaciers are rapidly melting, calving off into the sea and retreating on land.</p>
+      </div>
     </div>
     <div class="col-12 col-lg-6 ">
-      <img class="cpc wow fadeInRight"
-        src="images/cc.jfif"
-         height="350" data-wow-delay="0.2s">
+      <img class="cpc wow fadeInRight" src="images/cc.jfif" height="350" data-wow-delay="0.2s">
     </div>
   </div>
-</div>
-<div class="container ">
-  <div class="row mt-3 product-items">
-    {{!-- product --}}
+
+
+  <h1 class="cc wow fadeInDown" data-wow-delay="0.2s">About Threads In Time</h1>
+  <div class="txt row">
+    <div class="col-12 col-lg-6">
+      <img class="cpc wow fadeInLeft" src="images/logo.png" width="50%" height="100%" data-wow-delay="0.2s">
+    </div>
+    <div class="col-12 col-lg-6 wow fadeInRight" data-wow-delay="0.2s">
+      <div class="card home-card">
+        <p>
+          Due to the rise in fast fashion, we started Threads in time in hopes of reducing the wastage of slothes
+          created by fast fashion and every so fastly moving
+          fashion trends. Since being founder, we have prevented over 10000 pcs of clothing from ending up in landfills.
+          Play your part by selling your old clothes instead of
+          throwing it away and thrift clothes on our website. Compete to become the No.1 in out carbon footprint
+          leaderboard.
+        </p>
+      </div>
+    </div>
   </div>
+  <button class="blue-btn-full" onclick="location.href = '/products'">View Listings</button>
 </div>
 <style>
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
   body {
     background-color: black;
   }
+
+  .home-card {
+    background-color: rgb(17, 17, 17);
+    border-radius: 25px;
+  }
+
   img {
     display: block;
-  margin-left: auto;
-  margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   p {
@@ -88,6 +120,8 @@
   }
 
   .cc {
+    background-color: rgb(17, 17, 17);
+    border-radius: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
     text-align: center;
