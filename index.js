@@ -182,6 +182,6 @@ const port = 5000;
 
 
 // Starts the server and listen to port
-httpServer.listen(port, () => {
+httpServer.listen(process.env.PORT || 5000, () => {
 	console.log(`Server started on port ${port}`);
 });
