@@ -19,7 +19,7 @@
         <h3><img src="{{'user.profilepic'}}" style="height:60px">{{Owner}}</h3>
         {{/product}}
         {{#if (checkOwner id product.OwnerID)}}
-        <button class="modal-button chat-owned" style="border: none;"><span><a href="/inbox/new/{{sku}}" style="color:white; font-weight:bold;">view chats</a></span></button>
+        <button class="modal-button chat-owned" style="border: none;"><span><a href="/inbox" style="color:white; font-weight:bold;">View Chats</a></span></button>
         <button class="modal-button owned">
             <img src="https://mweb-cdn.karousell.com/build/listing-edit-280S39ckEp.svg" style="width: 16px !important;">
                 <span><a href="/editListing/{{product.sku}}">
@@ -28,11 +28,11 @@
             </button>
         <button class="modal-button owned">
             <img src="https://mweb-cdn.karousell.com/build/listing-sold-3z-PEti8bN.svg" style="width: 16px !important;">
-            <span>Mark as Sold</span>
+            <span onclick="sold(this)" value="{{product.sku}}">Mark as Sold</span>
             </button>
         <button class="modal-button owned delete" data-bs-toggle="modal" data-bs-target="#myModal">
             <img src="https://mweb-cdn.karousell.com/build/listing-delete-3DSVB-Tit_.svg" style="width: 16px !important;">
-                <span>
+                <span onclick="sold(this)" value="{{product.sku}}">
                     Delete
                 </span>
             </button>
@@ -59,10 +59,9 @@
 	</div>
 </div>    
         {{else}}
-            <button class="modal-button buy"><span>buy</span></button>
             {{!-- <button class="modal-button other fav"><span>Add To Favourite</span></button> --}}
             <br>
-            <button class="modal-button chat"><span>Chat Now</span></button>
+            <button class="modal-button buy" onclick="location.href = '/inbox/new/{{product.sku}}'"><span>Chat Now</span></button>
         {{/if}}
 
     </div>
@@ -352,6 +351,10 @@ width: 400px;
     }
 </style>
 <script>
+    function sold(element) {
+        console.log(element.value);
+        console.log("hi");
+    }
     window.addEventListener('load', function(){
         uploaded = new Date(document.getElementById('created').value)
         var present_date = new Date()
