@@ -227,6 +227,7 @@ router.post('/getWishlist', async (req, res) => {
         include: {model: Product,
         required: true},
     })
+    console.log(wishlist.rows)
     res.send({
         wishlist: wishlist.rows
     })
