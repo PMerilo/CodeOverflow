@@ -109,9 +109,9 @@ $.ajax({
 })
 function submitSorting(element){
   if(category == "" || category == null){
-    window.location.replace('/?sortby='+element.value)
+    window.location.replace('/products?sortby='+element.value)
   }else{
-    window.location.replace('/?category='+category+'&sortby='+element.value)
+    window.location.replace('/products?category='+category+'&sortby='+element.value)
   }
 }
 

@@ -103,10 +103,37 @@
               </form>
             </div>
             <div class="col-12 col-lg-6">
-              <button type="button" class="btn btn-success" style="float:right;" data-bs-toggle="modal"
-                data-bs-target="#mywithdrawModal_{{this.id}}">
-                Withdraw
-              </button>
+              <form action="/withdraw" style="margin-top: 10px;" method="POST">
+                <button type="button" class="btn btn-success" style="float:right;" data-bs-toggle="modal"
+                  data-bs-target="#mywithdrawModal_{{this.id}}">
+                  Withdraw - ${{user.total_balance}}
+                </button>
+
+                <div class="modal" id="mywithdrawModal_{{this.id}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <div class="modal-header">
+                        <h4 class="modal-title">Withdrawal</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+
+                      <div class="modal-body">
+                        <label for="bacc"  style="padding-bottom:10px;">Bank Account Number:</label>
+                        <input type="text" name="bacc" id="bacc">
+                        <label for="amt">Withdrawal Amount:</label>
+                        <input type="text" name="amt" id="amt">
+                      </div>
+
+                      <div class="modal-footer">
+                        <input type="submit" value="Submit" class="btn btn-success">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
 
           </div>

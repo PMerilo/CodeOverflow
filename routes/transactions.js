@@ -10,6 +10,8 @@ const fs = require('fs');
 const upload = require('../helpers/productUpload');
 const Chat = require('../models/Chat');
 const bodyParser = require('body-parser');
+const { emit } = require('process');
+const Msg = require('../models/Msg');
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 const stripePublicKey = process.env.STRIPE_PUBLIC_KEY
 const endpointSecret = process.env.WEBHOOK_SECRET;
@@ -22,7 +24,28 @@ router.get('/', async (req, res) => {
 const fulfillOrder = async (session) => {
     var userid = session.metadata.userId
     var chatid = session.metadata.chatId
-    
+    var chat = await Chat.findOne({ where: { id: chatid }, include: "product" })
+    var user = await User.findByPk(userid)
+    await User.update({total_balance : parseFloat(user.total_balance).toFixed(2) + parseFloat(chat.offer).toFixed(2)},{where : {id : userid}})
+    await Product.update({sold : 1},{where : {sku : chat.productId}})
+    await Chat.update({status : "Payment Made"},{where : {id : chatid}})
+    var offer = true
+    let chats
+
+    let msg = await Msg.create({
+        content: "Payment Successful $" + chat.offer,
+        userId: userid,
+        offer: offer
+    })
+
+    if (chatid) {
+        chats = await Chat.findByPk(chatid, { include: [Product, Msg, 'buyer'] })
+        await chats.addMsg(msg)
+    } 
+    console.log(userid)
+    console.log(chatid)
+    console.log(chat)
+    console.log(user)
     console.log("Payment Successful")
     // console.log("Fulfilling order", session)
 };
@@ -79,5 +102,12 @@ router.post('/payment', ensureAuthenticated, async (req, res) => {
         console.log(e.message)
         res.status(500).json({ error: e.message })
     }
+})
+
+router.post('/withdraw', ensureAuthenticated, async (req, res) => {
+    var user = await User.findByPk(req.user.id)
+    await User.decrement({ total_balance: req.body.amt }, { where: { id: req.user.id} })
+    await User.update({ bankAccount: req.body.bacc }, { where: { id: req.user.id} })
+    res.redirect("/user/account")
 })
 module.exports = router
