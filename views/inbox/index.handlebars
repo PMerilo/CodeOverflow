@@ -341,9 +341,11 @@
                     }
                     return { amt }
                 }
-            }).then(({ value }) => {
-                $.post('/inbox/makeoffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
-                sendOffer("Made Offer", value.amt)
+            }).then(({ value, isConfirmed }) => {
+                if (isConfirmed) {
+                    $.post('/inbox/makeoffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
+                    sendOffer("Made Offer", value.amt)
+                }
             })
         })
 
@@ -360,9 +362,11 @@
                     }
                     return { amt }
                 }
-            }).then(({ value }) => {
-                $.post('/inbox/counteroffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
-                sendOffer("Countered Offer", value.amt)
+            }).then(({ value, isConfirmed }) => {
+                if (isConfirmed) {
+                    $.post('/inbox/counteroffer', { chatId: window.location.pathname.split('/').pop(), amt: value.amt })
+                    sendOffer("Countered Offer", value.amt)
+                }
             })
         })
 
@@ -372,9 +376,11 @@
                 text: `Are you sure you want to refuse this offer?`,
                 showCancelButton: true,
                 confirmButtonText: 'Refuse',
-            }).then(({ value }) => {
-                $.post('/inbox/refuseoffer', { chatId: window.location.pathname.split('/').pop() })
-                sendOffer("Refused Offer", $('.offer-status').text().split('$').pop())
+            }).then(({ value, isConfirmed }) => {
+                if (isConfirmed) {
+                    $.post('/inbox/refuseoffer', { chatId: window.location.pathname.split('/').pop() })
+                    sendOffer("Refused Offer", $('.offer-status').text().split('$').pop())
+                }
             })
         })
 
@@ -384,9 +390,11 @@
                 text: `Are you sure you want to accept this offer?`,
                 showCancelButton: true,
                 confirmButtonText: 'Accept',
-            }).then(({ value }) => {
-                $.post('/inbox/acceptoffer', { chatId: window.location.pathname.split('/').pop() })
-                sendOffer("Accepted Offer", $('.offer-status').text().split('$').pop())
+            }).then(({ value, isConfirmed }) => {
+                if (isConfirmed) {
+                    $.post('/inbox/acceptoffer', { chatId: window.location.pathname.split('/').pop() })
+                    sendOffer("Accepted Offer", $('.offer-status').text().split('$').pop())
+                }
             })
         })
     })
